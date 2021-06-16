@@ -1,2 +1,2 @@
 # couchbase-cloud-go-client
-Go wrapper for the Couchbase Cloud REST API
+Work in progress Go wrapper for the Couchbase Cloud REST API
