@@ -8,14 +8,14 @@ Work in progress Go wrapper for the Couchbase Cloud REST API
 ### Import
 ```go
 import (
-    "github.com/couchbaselabs/couchbase-cloud-go-client"
+    "github.com/couchbaselabs/couchbase-cloud-go-client/couchbasecloud"
 )
 ```
 
 ### Client
 
 ```go
-client := couchbasecloudclient.NewClient(os.Getenv("CBC_ACCESS_KEY"), os.Getenv("CBC_SECRET_KEY"))
+client := couchbasecloud.NewClient(os.Getenv("CBC_ACCESS_KEY"), os.Getenv("CBC_SECRET_KEY"))
 ```
 
 ### List all clouds
@@ -25,7 +25,7 @@ page := 1
 lastPage := math.MaxInt16
 
 for ok := true; ok; ok = page <= lastPage {
-    listCloudsResponse, err := client.ListClouds(&couchbasecloudclient.ListCloudsOptions{Page: page, PerPage: 10})
+    listCloudsResponse, err := client.ListClouds(&couchbasecloud.ListCloudsOptions{Page: page, PerPage: 10})
 
     if err != nil {
         return nil, err
@@ -47,7 +47,7 @@ page := 1
 lastPage := math.MaxInt16
 
 for ok := true; ok; ok = page <= lastPage {
-    listClustersResponse, err := client.ListClusters(&couchbasecloudclient.ListClustersOptions{Page: page, PerPage: 10})
+    listClustersResponse, err := client.ListClusters(&couchbasecloud.ListClustersOptions{Page: page, PerPage: 10})
 
     if err != nil {
         return nil, err
