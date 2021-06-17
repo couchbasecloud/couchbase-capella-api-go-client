@@ -1,4 +1,4 @@
-package couchbasecloudclient
+package couchbasecloud
 
 import (
 	"crypto/hmac"
