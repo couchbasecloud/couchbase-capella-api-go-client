@@ -31,18 +31,19 @@ const listCloudsUrl = "/clouds"
 
 func (client *CouchbaseCloudClient) ListClouds(options *ListCloudsOptions) (*CloudsList, error) {
 	cloudsUrl := client.BaseURL + client.getApiEndpoint(listCloudsUrl)
-	setListCloudsParams(&cloudsUrl, *options)
+
+	if options != nil {
+		setListCloudsParams(&cloudsUrl, *options)
+	}
 
 	req, err := http.NewRequest(http.MethodGet, cloudsUrl, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-
 	res := CloudsList{}
 
-	if err := client.sendRequest(req, &res); err != nil {
+	if err := client.sendRequest(req, &res, true); err != nil {
 		return nil, err
 	}
 
