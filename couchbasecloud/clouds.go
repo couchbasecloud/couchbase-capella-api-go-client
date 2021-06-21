@@ -6,6 +6,8 @@ import (
 	"strconv"
 )
 
+type Clouds []Cloud
+
 type CloudsList struct {
 	Cursor Cursor  `json:"cursor"`
 	Data   []Cloud `json:"data"`
@@ -48,6 +50,35 @@ func (client *CouchbaseCloudClient) ListClouds(options *ListCloudsOptions) (*Clo
 	}
 
 	return &res, nil
+}
+
+// ListCloudPages allows iterating over all the clouds. For every page of cloud items it will call the callback and pass
+// the page worth of clouds as well as a boolean that indicates whether is is the last page or not.
+// The function iterates over all the pages either until the callback returns false, the REST endpoint returns an error
+// or it runs out of pages.
+func (client *CouchbaseCloudClient) ListCloudPages(options *ListCloudsOptions, fn func (Clouds, bool) bool) error {
+	var localOpts ListCloudsOptions
+	if options != nil {
+		localOpts = *options
+	}
+
+	for {
+		clouds, err := client.ListClouds(&localOpts)
+		if err != nil {
+			return err
+		}
+
+		if len(clouds.Data) == 0 {
+			return nil
+		}
+
+		cont := fn(clouds.Data, clouds.Cursor.Pages.Last >= clouds.Cursor.Pages.Page)
+		if !cont {
+			return nil
+		}
+
+		localOpts.Page ++
+	}
 }
 
 func setListCloudsParams(urlStr *string, options ListCloudsOptions) {
