@@ -33,18 +33,19 @@ const listClustersUrl = "/clusters"
 
 func (client *CouchbaseCloudClient) ListClusters(options *ListClustersOptions) (*ClustersList, error) {
 	cloudsUrl := client.BaseURL + client.getApiEndpoint(listClustersUrl)
-	setListClustersParams(&cloudsUrl, *options)
+
+	if options != nil {
+		setListClustersParams(&cloudsUrl, *options)
+	}
 
 	req, err := http.NewRequest(http.MethodGet, cloudsUrl, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-
 	res := ClustersList{}
 
-	if err := client.sendRequest(req, &res); err != nil {
+	if err := client.sendRequest(req, &res, true); err != nil {
 		return nil, err
 	}
 

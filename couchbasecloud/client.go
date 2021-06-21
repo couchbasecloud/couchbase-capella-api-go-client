@@ -54,13 +54,17 @@ func NewClient(apiAccessKey string, apiSecretKey string) *CouchbaseCloudClient {
 	}
 }
 
-func (client *CouchbaseCloudClient) sendRequest(req *http.Request, dataType interface{}) error {
+func (client *CouchbaseCloudClient) sendRequest(req *http.Request, dataType interface{}, jsonReqBody bool) error {
 	timestamp := getEpochTimestampMs()
 	bearerToken := getBearerToken(client.apiAccessKey, client.apiSecretKey, req.Method, req.URL.RequestURI(), timestamp)
 
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", bearerToken))
 	req.Header.Set("Accept", "application/json; charset=utf-8")
 	req.Header.Set("Couchbase-Timestamp", timestamp)
+
+	if jsonReqBody {
+		req.Header.Set("Content-Type", "application/json; charset=utf-8")
+	}
 
 	res, err := client.HTTPClient.Do(req)
 	if err != nil {
