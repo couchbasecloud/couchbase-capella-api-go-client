@@ -1,4 +1,7 @@
 # couchbase-cloud-go-client
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/couchbaselabs/couchbase-cloud-go-client.svg)](https://pkg.go.dev/github.com/couchbaselabs/couchbase-cloud-go-client)
+
 Work in progress Go wrapper for the Couchbase Cloud REST API
 
 ## Usage
@@ -21,51 +24,25 @@ client := couchbasecloud.NewClient(os.Getenv("CBC_ACCESS_KEY"), os.Getenv("CBC_S
 ### List all clouds
 Options can be specified with the `ListCloudOptions` type (some are optional)
 ```go
-page := 1
-lastPage := math.MaxInt16
-
-for ok := true; ok; ok = page <= lastPage {
-    listCloudsResponse, err := client.ListClouds(&couchbasecloud.ListCloudsOptions{Page: page, PerPage: 10})
-
-    if err != nil {
-        return nil, err
+return client.ListCloudPages(nil, func(clouds couchbasecloud.Clouds, b bool) bool {
+    for _, cloud := range clouds {
+        fmt.Println(cloud.Name)
     }
-
-    for _, cloud := range listCloudsResponse.Data {
-        fmt.Printf(cloud.Name)
-    }
-
-    lastPage = listCloudsResponse.Cursor.Pages.Last
-    page++
-}
+})
 ```
 
 ### List all clusters
 Options can be specified with the `ListClustersOptions` type (some are optional)
 ```go
-page := 1
-lastPage := math.MaxInt16
-
-for ok := true; ok; ok = page <= lastPage {
-    listClustersResponse, err := client.ListClusters(&couchbasecloud.ListClustersOptions{Page: page, PerPage: 10})
-
-    if err != nil {
-        return nil, err
+return client.ListClusterPages(nil, func(clusters couchbasecloud.Clusters, b bool) bool {
+    for _, cloud := range clouds {
+        fmt.Println(cluster.Name)
     }
-
-    for _, cluster := range listClustersResponse.Data {
-        fmt.Printf(cluster.Name)
-    }
-
-    lastPage = listClustersResponse.Cursor.Pages.Last
-    page++
-}
+})
 ```
 
 ## TODO
 
-- Build better (functional) pagination capabilities into the client. E.g.  iterator functions like aws has 
-  https://docs.aws.amazon.com/sdk-for-go/api/service/s3/#S3.ListObjectsV2Pages
 - Unit/integration testing
 - Add documentation strings to all public types and functions so that documentation can be auto-generated from the code.
 - Add linter https://github.com/golangci/golangci-lint to help maintain code quality.

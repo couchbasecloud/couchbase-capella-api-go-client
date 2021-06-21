@@ -54,11 +54,11 @@ func (client *CouchbaseCloudClient) ListClusters(options *ListClustersOptions) (
 	return &res, nil
 }
 
-// ListClustersPages allows iterating over all the clusters. For every page of cluster items it will call the callback
+// ListClusterPages allows iterating over all the clusters. For every page of cluster items it will call the callback
 // and pass the page worth of clouds as well as a boolean that indicates whether is is the last page or not. The
 // function iterates over all the pages either until the callback returns false, the REST endpoint returns an error
 // or it runs out of pages.
-func (client *CouchbaseCloudClient) ListClustersPages(opts *ListClustersOptions, fn func(Clusters, bool) bool) error {
+func (client *CouchbaseCloudClient) ListClusterPages(opts *ListClustersOptions, fn func(Clusters, bool) bool) error {
 	var localOpts ListClustersOptions
 	if opts != nil {
 		localOpts = *opts
