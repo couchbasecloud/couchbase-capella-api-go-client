@@ -1,0 +1,2109 @@
+openapi: 3.0.3
+info:
+  title: Couchbase Public API
+  version: 2.0.0
+servers:
+- url: https://cloudapi.cloud.couchbase.com
+- url: https://cloudapi.stage.nonprod-project-avengers.com
+- url: https://cloudapi.dev.nonprod-project-avengers.com
+security:
+- token: []
+paths:
+  /v2/status:
+    get:
+      description: Returns a public API status
+      operationId: status/show
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusOK'
+          description: Success
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      security: []
+      summary: API status
+      tags:
+      - status
+  /v2/clouds:
+    get:
+      description: Returns a paginated list of clouds created by the tenant
+      operationId: clouds/list
+      parameters:
+      - description: Sets how many results you would like to have on each page
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Sets what page you would like to view
+        explode: true
+        in: query
+        name: perPage
+        required: false
+        schema:
+          type: integer
+        style: form
+      - allowReserved: true
+        description: Sets order of how you would like to sort results and also the
+          key you would like to order by
+        example: name.desc
+        explode: true
+        in: query
+        name: sortBy
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCloudsResponse'
+          description: Success
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: List Clouds
+      tags:
+      - clouds
+  /v2/clouds/{id}:
+    get:
+      description: Returns a single cloud by the ID
+      operationId: clouds/show
+      parameters:
+      - description: Cloud IDA
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cloud'
+          description: |
+            On success returns a Cloud details.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Get Cloud
+      tags:
+      - clouds
+  /v2/projects:
+    get:
+      description: Returns a paginated list of projects created by the tenant
+      operationId: projects/list
+      parameters:
+      - description: Sets how many results you would like to have on each page
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Sets what page you would like to view
+        explode: true
+        in: query
+        name: perPage
+        required: false
+        schema:
+          type: integer
+        style: form
+      - allowReserved: true
+        description: Sets order of how you would like to sort results and also the
+          key you would like to order by
+        example: name.desc
+        explode: true
+        in: query
+        name: sortBy
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListProjectsResponse'
+          description: Success
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: List Projects
+      tags:
+      - projects
+    post:
+      description: Creates project in tenant, returns id of project on success
+      operationId: projects/create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: Success
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Create project
+      tags:
+      - projects
+  /v2/projects/{id}:
+    delete:
+      description: Deletes endpoint with specified ID if exists, returns true on success
+        and error if not
+      operationId: projects/delete
+      parameters:
+      - description: Project ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: The project was deleted successfully
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Delete project
+      tags:
+      - projects
+    get:
+      description: Returns the project with the ID
+      operationId: projects/show
+      parameters:
+      - description: Project ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: Success
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Get project by ID
+      tags:
+      - projects
+  /v2/clusters:
+    get:
+      description: |
+        Return a paginated list of organisation Clusters.
+      operationId: clusters/list
+      parameters:
+      - description: Sets how many results you would like to have on each page
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Sets what page you would like to view
+        explode: true
+        in: query
+        name: perPage
+        required: false
+        schema:
+          type: integer
+        style: form
+      - allowReserved: true
+        description: Sets order of how you would like to sort results and also the
+          key you would like to order by
+        example: name.desc
+        explode: true
+        in: query
+        name: sortBy
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: |
+          Cloud ID for filtering cloud clusters.
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: true
+        in: query
+        name: cloudId
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: form
+      - description: |
+          Project ID for filtering project clusters.
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: true
+        in: query
+        name: projectId
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListClustersResponse'
+          description: Success
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: List Clusters
+      tags:
+      - clusters
+    post:
+      description: Creates cluster in cloud, returns id of the cluster on success
+      operationId: clusters/create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClusterRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cluster'
+          description: Success
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Create cluster
+      tags:
+      - clusters
+  /v2/clusters/{id}:
+    delete:
+      description: Start a delete cluster job
+      operationId: clusters/delete
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Successfully started delete cluster job
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Delete cluster
+      tags:
+      - clusters
+    get:
+      description: Retrieve a cluster by ID
+      operationId: clusters/show
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cluster'
+          description: |
+            if found, returns a cluster.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Get Cluster
+      tags:
+      - clusters
+  /v2/clusters/{id}/buckets:
+    delete:
+      description: Deletes bucket in cluster specified with cluster id parameter
+      operationId: clusters/delete-bucket
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteBucketRequest'
+      responses:
+        "204":
+          description: Successfully deleted bucket
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Delete bucket in cluster
+      tags:
+      - clusters
+    get:
+      description: Returns a list of existing cluster buckets
+      operationId: clusters/list-buckets
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListBucketsResponse'
+          description: Cluster's bucket list
+      summary: List cluster buckets
+      tags:
+      - clusters
+    post:
+      description: Creates bucket in cluster specified with cluster id parameter
+      operationId: clusters/create-bucket
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CouchbaseBucketSpec'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CouchbaseBucketSpec'
+          description: Successfully created bucket
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Create bucket in cluster
+      tags:
+      - clusters
+  /v2/clusters/{id}/allowlist:
+    delete:
+      description: Deletes entry from allowlist, will use CIDR block as key
+      operationId: clusters/delete-allowlist-entry
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteAllowListEntryRequest'
+      responses:
+        "204":
+          description: Successfully deleted allowlist entry
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Delete entry from allowlist
+      tags:
+      - clusters
+    get:
+      description: Returns a list with all the allowed IP ranges/addresses
+      operationId: clusters/get-allowlist
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAllowListResponse'
+          description: Returns allowlist
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Get current allowlist
+      tags:
+      - clusters
+    post:
+      description: Appends entry sent to the allowlist
+      operationId: clusters/create-allowlist-entry
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppendAllowListRequest'
+      responses:
+        "204":
+          description: Successfully appended entry to allowlist
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Adds entry to allowlist
+      tags:
+      - clusters
+  /v2/clusters/{id}/certificate:
+    get:
+      description: |
+        Retrieve a self-signed certificate to securely connect to the cluster. Required for both public and private connections.
+      operationId: clusters/get-certificate
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCertificateResponse'
+          description: |
+            Returns a self-signed certificate
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Get Cluster Certificate
+      tags:
+      - clusters
+  /v2/clusters/{id}/users/{username}:
+    delete:
+      description: |
+        Delete Cluster's Database User and revoke its access to the bucket(s)
+      operationId: clusters/delete-user
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Database User username
+        example: foobar
+        explode: false
+        in: path
+        name: username
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Successfully deleted Database User
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Delete Database User
+      tags:
+      - clusters
+  /v2/clusters/{id}/users:
+    get:
+      description: |
+        Returns a list of Cluster's Database Users.
+      operationId: clusters/list-users
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDatabaseUsersResponse'
+          description: |
+            On success returns a list of Database users.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: List Database Users
+      tags:
+      - clusters
+    post:
+      description: |
+        Creates Database user. A database user entity is required for applications to remotely authenticate on a cluster and access bucket data
+      operationId: clusters/create-user
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDatabaseUserRequest'
+      responses:
+        "201":
+          description: |
+            Successfully created database user.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Create Database User
+      tags:
+      - clusters
+components:
+  schemas:
+    StatusOK:
+      example:
+        status: status
+      properties:
+        status:
+          type: string
+      required:
+      - status
+      type: object
+    goof:
+      properties:
+        message:
+          type: string
+        errorType:
+          type: string
+      required:
+      - errorType
+      - message
+      type: object
+    ListCloudsResponse:
+      example:
+        cursor:
+          pages:
+            next: 6
+            totalItems: 2
+            perPage: 5
+            previous: 1
+            last: 5
+            page: 0
+          hrefs:
+            next: https://openapi-generator.tech
+            last: https://openapi-generator.tech
+            previous: https://openapi-generator.tech
+            first: https://openapi-generator.tech
+        data:
+        - virtualNetworkCIDR: virtualNetworkCIDR
+          name: name
+          virtualNetworkID: virtualNetworkID
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - virtualNetworkCIDR: virtualNetworkCIDR
+          name: name
+          virtualNetworkID: virtualNetworkID
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        cursor:
+          $ref: '#/components/schemas/cursor'
+        data:
+          items:
+            $ref: '#/components/schemas/CloudSummary'
+          type: array
+      required:
+      - cursor
+      - data
+      type: object
+    CloudSummary:
+      example:
+        virtualNetworkCIDR: virtualNetworkCIDR
+        name: name
+        virtualNetworkID: virtualNetworkID
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          maximum: 256
+          minimum: 1
+          type: string
+        status:
+          $ref: '#/components/schemas/cloudStatus'
+        provider:
+          $ref: '#/components/schemas/provider'
+        region:
+          $ref: '#/components/schemas/Regions'
+        virtualNetworkID:
+          type: string
+        virtualNetworkCIDR:
+          type: string
+      required:
+      - id
+      - name
+      - provider
+      - region
+      - status
+      - virtualNetworkCIDR
+      - virtualNetworkID
+      type: object
+    Regions:
+      oneOf:
+      - $ref: '#/components/schemas/azureRegions'
+      - $ref: '#/components/schemas/awsRegions'
+    Cloud:
+      example:
+        preflightCompletedAt: 2000-01-23T04:56:07.000+00:00
+        bootstrappedAt: 2000-01-23T04:56:07.000+00:00
+        version:
+          components:
+            key: components
+          name: name
+        deployedAt: 2000-01-23T04:56:07.000+00:00
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        preflightFailedAt: 2000-01-23T04:56:07.000+00:00
+        destroyedAt: 2000-01-23T04:56:07.000+00:00
+        name: name
+        tenantId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        preflightStartedAt: 2000-01-23T04:56:07.000+00:00
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          maximum: 256
+          minimum: 1
+          type: string
+        tenantId:
+          format: uuid
+          type: string
+        status:
+          $ref: '#/components/schemas/cloudStatus'
+        provider:
+          $ref: '#/components/schemas/provider'
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        preflightStartedAt:
+          format: date-time
+          type: string
+        preflightFailedAt:
+          format: date-time
+          type: string
+        preflightCompletedAt:
+          format: date-time
+          type: string
+        bootstrappedAt:
+          format: date-time
+          type: string
+        deployedAt:
+          format: date-time
+          type: string
+        destroyedAt:
+          format: date-time
+          type: string
+        providerSettings:
+          $ref: '#/components/schemas/CloudProviderSettings'
+        version:
+          $ref: '#/components/schemas/CloudVersion'
+      required:
+      - createdAt
+      - id
+      - name
+      - provider
+      - providerSettings
+      - status
+      - tenantId
+      - version
+      type: object
+    CloudProviderSettings:
+      oneOf:
+      - $ref: '#/components/schemas/AzureProviderSettings'
+      - $ref: '#/components/schemas/AWSProviderSettings'
+    AzureProviderSettings:
+      properties:
+        resourceGroupName:
+          type: string
+        region:
+          $ref: '#/components/schemas/azureRegions'
+        aksClusterName:
+          type: string
+        dnsPrefix:
+          type: string
+        defaultNodePoolName:
+          type: string
+        tags:
+          additionalProperties:
+            type: string
+          type: object
+        vNetCidr:
+          type: string
+        vNetName:
+          type: string
+        storageAccountName:
+          type: string
+        configContainerName:
+          type: string
+        importContainerName:
+          type: string
+        availabilityZones:
+          items:
+            type: string
+          type: array
+        azCount:
+          type: integer
+        deploymentName:
+          type: string
+        msiName:
+          type: string
+        tenantId:
+          type: string
+        subscriptionId:
+          type: string
+      type: object
+    AWSProviderSettings:
+      properties:
+        region:
+          $ref: '#/components/schemas/awsRegions'
+        bucket:
+          type: string
+        supportBucket:
+          type: string
+        accountId:
+          type: string
+        vpcCidr:
+          type: string
+        vpcId:
+          type: string
+        stackId:
+          type: string
+        privateSubnets:
+          items:
+            type: string
+          type: array
+        availabilityZone:
+          items:
+            type: string
+          type: array
+        azCount:
+          type: integer
+        lastRotated:
+          format: date-time
+          type: string
+      type: object
+    CloudVersion:
+      example:
+        components:
+          key: components
+        name: name
+      properties:
+        name:
+          type: string
+        components:
+          additionalProperties:
+            type: string
+          properties:
+            default:
+              enum:
+              - kubernetesVersion
+              - cbServerVersion
+              - operatorVersion
+              - componentVersion
+              - nodeImageVersion
+              - quickstartVersion
+              - bootstrapFunctionVersion
+              type: string
+          type: object
+      required:
+      - components
+      - name
+      type: object
+    ListProjectsResponse:
+      example:
+        cursor:
+          pages:
+            next: 6
+            totalItems: 2
+            perPage: 5
+            previous: 1
+            last: 5
+            page: 0
+          hrefs:
+            next: https://openapi-generator.tech
+            last: https://openapi-generator.tech
+            previous: https://openapi-generator.tech
+            first: https://openapi-generator.tech
+        data:
+        - createdAt: 2021-01-30T08:30:00Z
+          name: name
+          tenantId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - createdAt: 2021-01-30T08:30:00Z
+          name: name
+          tenantId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        cursor:
+          $ref: '#/components/schemas/cursor'
+        data:
+          items:
+            $ref: '#/components/schemas/Project'
+          type: array
+      required:
+      - cursor
+      - data
+      type: object
+    Project:
+      example:
+        createdAt: 2021-01-30T08:30:00Z
+        name: name
+        tenantId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          maximum: 256
+          minimum: 1
+          type: string
+        tenantId:
+          format: uuid
+          type: string
+        createdAt:
+          description: Creation date and time
+          example: 2021-01-30T08:30:00Z
+          format: date-time
+          type: string
+      required:
+      - createdAt
+      - id
+      - name
+      - tenantId
+      type: object
+    CreateProjectRequest:
+      example:
+        name: name
+      properties:
+        name:
+          maximum: 128
+          minimum: 1
+          type: string
+      required:
+      - name
+      type: object
+    ListClustersResponse:
+      example:
+        cursor:
+          pages:
+            next: 6
+            totalItems: 2
+            perPage: 5
+            previous: 1
+            last: 5
+            page: 0
+          hrefs:
+            next: https://openapi-generator.tech
+            last: https://openapi-generator.tech
+            previous: https://openapi-generator.tech
+            first: https://openapi-generator.tech
+        data:
+        - nodes: 0
+          cloudId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          name: name
+          tenantId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          services:
+          - null
+          - null
+          projectId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - nodes: 0
+          cloudId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          name: name
+          tenantId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          services:
+          - null
+          - null
+          projectId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        cursor:
+          $ref: '#/components/schemas/cursor'
+        data:
+          items:
+            $ref: '#/components/schemas/ClusterSummary'
+          type: array
+      required:
+      - cursor
+      - data
+      type: object
+    ClusterSummary:
+      example:
+        nodes: 0
+        cloudId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: name
+        tenantId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        services:
+        - null
+        - null
+        projectId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        tenantId:
+          format: uuid
+          type: string
+        cloudId:
+          format: uuid
+          type: string
+        projectId:
+          format: uuid
+          type: string
+        status:
+          $ref: '#/components/schemas/clusterStatus'
+        health:
+          $ref: '#/components/schemas/clusterHealth'
+        services:
+          items:
+            $ref: '#/components/schemas/couchbaseServices'
+          type: array
+        nodes:
+          type: integer
+      required:
+      - cloudId
+      - health
+      - id
+      - name
+      - nodes
+      - projectId
+      - services
+      - status
+      - tenantId
+      type: object
+    Cluster:
+      example:
+        cloudId: cloudId
+        name: name
+        tenantId: tenantId
+        id: id
+        projectId: projectId
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        tenantId:
+          type: string
+        cloudId:
+          type: string
+        projectId:
+          type: string
+        status:
+          $ref: '#/components/schemas/clusterStatus'
+      required:
+      - cloudId
+      - id
+      - name
+      - projectId
+      - status
+      - tenantId
+      type: object
+    CreateClusterRequest:
+      example:
+        servers:
+        - size: 3
+          services:
+          - null
+          - null
+          aws:
+            ebsSizeGib: 9876
+          azure: {}
+        - size: 3
+          services:
+          - null
+          - null
+          aws:
+            ebsSizeGib: 9876
+          azure: {}
+        supportPackage: {}
+        cloudId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: name
+        projectId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        version: version
+      properties:
+        name:
+          maximum: 128
+          minimum: 2
+          type: string
+        cloudId:
+          format: uuid
+          type: string
+        projectId:
+          format: uuid
+          type: string
+        servers:
+          items:
+            $ref: '#/components/schemas/Server'
+          type: array
+        supportPackage:
+          $ref: '#/components/schemas/CreateClusterRequest_supportPackage'
+        version:
+          description: |
+            If not defined the latest version of Couchbase Server is deployed.
+          type: string
+      required:
+      - cloudId
+      - name
+      - projectId
+      type: object
+    Server:
+      example:
+        size: 3
+        services:
+        - null
+        - null
+        aws:
+          ebsSizeGib: 9876
+        azure: {}
+      properties:
+        size:
+          maximum: 27
+          minimum: 1
+          type: integer
+        services:
+          items:
+            $ref: '#/components/schemas/couchbaseServices'
+          type: array
+        aws:
+          $ref: '#/components/schemas/Server_aws'
+        azure:
+          $ref: '#/components/schemas/Server_azure'
+      required:
+      - services
+      - size
+      type: object
+    ListBucketsResponse:
+      items:
+        $ref: '#/components/schemas/ListBucketItem'
+      type: array
+    ListBucketItem:
+      example:
+        replicas: 6
+        name: name
+        memoryQuota: 0
+        status: status
+      properties:
+        name:
+          maximum: 100
+          minimum: 1
+          type: string
+        memoryQuota:
+          type: integer
+        replicas:
+          type: integer
+        conflictResolution:
+          $ref: '#/components/schemas/conflictResolution'
+        status:
+          type: string
+      required:
+      - conflictResolution
+      - memoryQuota
+      - name
+      - replicas
+      - status
+      type: object
+    CouchbaseBucketSpec:
+      example:
+        replicas: 6
+        name: name
+        memoryQuota: 100
+      properties:
+        name:
+          maximum: 100
+          minimum: 1
+          type: string
+        memoryQuota:
+          minimum: 100
+          type: integer
+        replicas:
+          default: 1
+          type: integer
+        conflictResolution:
+          $ref: '#/components/schemas/conflictResolution'
+      required:
+      - memoryQuota
+      - name
+      type: object
+    DeleteBucketRequest:
+      example:
+        name: name
+      properties:
+        name:
+          description: The name of the bucket to be deleted
+          maximum: 100
+          minimum: 1
+          type: string
+      required:
+      - name
+      type: object
+    ListAllowListResponse:
+      items:
+        $ref: '#/components/schemas/AllowListEntry'
+      type: array
+    AllowListEntry:
+      example:
+        duration: duration
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        cidrBlock: cidrBlock
+        comment: comment
+        expiresAt: 2000-01-23T04:56:07.000+00:00
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        cidrBlock:
+          type: string
+        ruleType:
+          $ref: '#/components/schemas/allowListRules'
+        duration:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        expiresAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        comment:
+          type: string
+        state:
+          $ref: '#/components/schemas/allowListStates'
+      required:
+      - cidrBlock
+      - comment
+      - createdAt
+      - ruleType
+      - state
+      - updatedAt
+      type: object
+    AppendAllowListRequest:
+      example:
+        duration: 1h0m0s
+        cidrBlock: cidrBlock
+        comment: comment
+      properties:
+        cidrBlock:
+          type: string
+        ruleType:
+          $ref: '#/components/schemas/allowListRules'
+        comment:
+          type: string
+        duration:
+          description: The duration you would like the temporary cidr block to be
+            active
+          example: 1h0m0s
+          type: string
+      required:
+      - cidrBlock
+      - ruleType
+      type: object
+    DeleteAllowListEntryRequest:
+      example:
+        cidrBlock: cidrBlock
+      properties:
+        cidrBlock:
+          type: string
+      required:
+      - cidrBlock
+      type: object
+    GetCertificateResponse:
+      example:
+        certificate: |
+          -----BEGIN CERTIFICATE-----↵MIIDFTCCAf2gAwIBAgI[...]CSYBWaK0ofivA==↵-----END CERTIFICATE-----
+      properties:
+        certificate:
+          example: |
+            -----BEGIN CERTIFICATE-----↵MIIDFTCCAf2gAwIBAgI[...]CSYBWaK0ofivA==↵-----END CERTIFICATE-----
+          type: string
+      required:
+      - certificate
+      type: object
+    ListDatabaseUsersResponse:
+      items:
+        $ref: '#/components/schemas/ListDatabaseUsersResponseItem'
+      type: array
+    ListDatabaseUsersResponseItem:
+      example:
+        access:
+        - roles:
+          - null
+          - null
+          name: name
+        - roles:
+          - null
+          - null
+          name: name
+        userId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        username: username
+      properties:
+        userId:
+          description: |
+            Organisation user ID Database user is attached to
+          format: uuid
+          type: string
+        username:
+          type: string
+        access:
+          items:
+            $ref: '#/components/schemas/BucketRole'
+          type: array
+      required:
+      - access
+      - username
+      type: object
+    BucketRole:
+      description: |
+        Specifies the roles of the user for the given bucket If name is blank, the permission would apply to all buckets on the database for the user.
+      example:
+        roles:
+        - null
+        - null
+        name: name
+      properties:
+        name:
+          description: Bucket Name
+          type: string
+        roles:
+          items:
+            $ref: '#/components/schemas/bucketRoleTypes'
+          minimum: 1
+          type: array
+          uniqueItems: true
+      required:
+      - name
+      - roles
+      type: object
+    CreateDatabaseUserRequest:
+      example:
+        password: password
+        access:
+        - roles:
+          - null
+          - null
+          name: name
+        - roles:
+          - null
+          - null
+          name: name
+        userId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        username: username
+      properties:
+        userId:
+          description: |
+            Organisation user which is assigned to the database user.
+          format: uuid
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        access:
+          items:
+            $ref: '#/components/schemas/BucketRole'
+          type: array
+      required:
+      - access
+      - password
+      - username
+      type: object
+    cursor:
+      example:
+        pages:
+          next: 6
+          totalItems: 2
+          perPage: 5
+          previous: 1
+          last: 5
+          page: 0
+        hrefs:
+          next: https://openapi-generator.tech
+          last: https://openapi-generator.tech
+          previous: https://openapi-generator.tech
+          first: https://openapi-generator.tech
+      properties:
+        pages:
+          $ref: '#/components/schemas/cursor_pages'
+        hrefs:
+          $ref: '#/components/schemas/cursor_hrefs'
+      required:
+      - hrefs
+      - pages
+      type: object
+    cloudStatus:
+      enum:
+      - needs_bootstrap
+      - preflight_started
+      - preflight_failed
+      - preflight_succeeded
+      - bootstrap_succeeded
+      - deploying
+      - deploy_failed
+      - deploy_succeeded
+      - ready
+      - destroying
+      - destroy_failed
+      - destroy_succeeded
+      - needs_cleanup
+      - management_blocked
+      type: string
+    provider:
+      enum:
+      - aws
+      - gcp
+      - azure
+      type: string
+    azureRegions:
+      enum:
+      - centralus
+      - eastus2
+      - eastus
+      - francecentral
+      - japaneast
+      - northeurope
+      - southeastasia
+      - uksouth
+      - westeurope
+      - westus2
+      type: string
+    awsRegions:
+      enum:
+      - us-east-1
+      - us-east-2
+      - us-west-2
+      - eu-west-1
+      - eu-central-1
+      - eu-west-2
+      - eu-west-3
+      - eu-north-1
+      - ap-southeast-1
+      - ap-northeast-1
+      - ap-southeast-2
+      - ap-northeast-2
+      - ap-south-1
+      - ca-central-1
+      type: string
+    clusterStatus:
+      description: |
+        * `draft` - indicates that all fields under database model are mutable.
+        * `needs_deploy` - indicates that the new configuration changes have not been applied to the cluster
+        * `job_scheduled` - indicates that the new configuration changes have been scheduled to be applied.
+        * `deploying` - indicates that database is currently being deployed/new configurations being applied.
+        * `deploy_failed` - indicates that the last deployment failed.
+        * `deploy_succeeded` - indicates that the last deployment succeeded.
+        * `ready` - indicates that the database is ready.
+        * `destroying` - indicates that the database is being destroyed.
+        * `destroy_failed` - indicates that the database destroy job failed.
+        * `destroy_succeeded` - indicates that the database destroy job succeeded.
+        * `metrics_failed` - indicates that the database is not serving metrics.
+        * `preflight_started` - indicates a preflight check has started on the database
+        * `preflight_failed` - indicates a preflight check has failed on the database
+        * `preflight_succeeded` - indicates a preflight check has succeeded on the database
+        * `management_blocked` - indicates the IAM credentiald for the cloud hosting the databse have been deleted.
+        * `upgrading` - indicates the database is being upgrading.
+      enum:
+      - draft
+      - needs_deploy
+      - job_scheduled
+      - deploying
+      - deploy_failed
+      - deploy_succeeded
+      - ready
+      - destroying
+      - destroy_failed
+      - destroy_succeeded
+      - metrics_failed
+      - preflight_started
+      - preflight_failed
+      - preflight_succeeded
+      - management_blocked
+      - upgrading
+      type: string
+    clusterHealth:
+      description: |
+        * `healthy` - denotes that the resource is in a healthy state.
+        * `unhealthy` - denotes that the resource is in an uhealthy state.
+        * `degraded` - is reported for the overall health of a cluster or overall health for all nodes if all unhealthy nodes in the cluster are failed over.
+        * `failedOver` - enotes that a couchbase server node failed over to a new pod. This status is attached only to a node.
+        * `inactiveFailed` - is the value of the cluster membership as reported for a couchbase server node when it is in failed over state.
+        * `N/A` - is the value of the cluster membership if we are unable to determine the health of the cluster
+      enum:
+      - healthy
+      - unhealthy
+      - degraded
+      - failedOver
+      - inactiveFailed
+      - N/A
+      type: string
+    couchbaseServices:
+      enum:
+      - data
+      - index
+      - query
+      - search
+      - eventing
+      - analytics
+      type: string
+    supportPackageType:
+      enum:
+      - enterprise
+      - developerPro
+      - forumSupport
+      type: string
+    supportTimezones:
+      description: |
+        * `ET` - Eastern Time
+        * `GMT` - Greenwich Mean Time
+        * `IST` - India Standard Time
+        * `PT` - Pacific Time
+      enum:
+      - ET
+      - GMT
+      - IST
+      - PT
+      type: string
+    awsInstances:
+      enum:
+      - m5.large
+      - m5.xlarge
+      - m5.2xlarge
+      - m5.4xlarge
+      - m5.8xlarge
+      - m5.12xlarge
+      - m5.16xlarge
+      - m5.24xlarge
+      - r5.large
+      - r5.xlarge
+      - r5.2xlarge
+      - r5.4xlarge
+      - r5.8xlarge
+      - r5.12xlarge
+      - r5.24xlarge
+      - c5.large
+      - c5.xlarge
+      - c5.2xlarge
+      - c5.4xlarge
+      - c5.9xlarge
+      - c5.12xlarge
+      - c5.18xlarge
+      - x1.16xlarge
+      - x1.32xlarge
+      type: string
+    azureInstances:
+      enum:
+      - Standard_F4s_v2
+      - Standard_F8s_v2
+      - Standard_F16s_v2
+      - Standard_F32s_v2
+      - Standard_F48s_v2
+      - Standard_F64s_v2
+      - Standard_F72s_v2
+      - Standard_D4s_v3
+      - Standard_D8s_v3
+      - Standard_D16s_v3
+      - Standard_D32s_v3
+      - Standard_D48s_v3
+      - Standard_D64s_v3
+      - Standard_E4s_v3
+      - Standard_E8s_v3
+      - Standard_E16s_v3
+      - Standard_E20s_v3
+      - Standard_E32s_v3
+      - Standard_E48s_v3
+      - Standard_E64s_v3
+      - Standard_GS2
+      - Standard_GS3
+      - Standard_GS4
+      - Standard_GS5
+      type: string
+    azureVolumeTypes:
+      enum:
+      - P4
+      - P6
+      - P10
+      - P15
+      - P20
+      - P30
+      type: string
+    conflictResolution:
+      default: seqno
+      enum:
+      - lww
+      - seqno
+      type: string
+    allowListRules:
+      enum:
+      - temporary
+      - permanent
+      type: string
+    allowListStates:
+      enum:
+      - active
+      - pending
+      - failed
+      - expired
+      type: string
+    bucketRoleTypes:
+      description: |
+        * `data_writer` - Gives the user permission to read and write data for the bucket. * `data_reader` - Gives the user read-only permission for the bucket.
+      enum:
+      - data_writer
+      - data_reader
+      type: string
+    CreateClusterRequest_supportPackage:
+      description: |
+        if support package is not set then default support package is used.
+      example: {}
+      properties:
+        type:
+          $ref: '#/components/schemas/supportPackageType'
+        timezone:
+          $ref: '#/components/schemas/supportTimezones'
+      required:
+      - timezone
+      - type
+      type: object
+    Server_aws:
+      example:
+        ebsSizeGib: 9876
+      properties:
+        instanceSize:
+          $ref: '#/components/schemas/awsInstances'
+        ebsSizeGib:
+          maximum: 16384
+          minimum: 4
+          type: integer
+      required:
+      - ebsSizeGib
+      - instanceSize
+      type: object
+    Server_azure:
+      example: {}
+      properties:
+        instanceSize:
+          $ref: '#/components/schemas/azureInstances'
+        volumeType:
+          $ref: '#/components/schemas/azureVolumeTypes'
+      required:
+      - instanceSize
+      - volumeType
+      type: object
+    cursor_pages:
+      example:
+        next: 6
+        totalItems: 2
+        perPage: 5
+        previous: 1
+        last: 5
+        page: 0
+      properties:
+        page:
+          description: Current page starting from 1.
+          type: integer
+        next:
+          description: |
+            Next page number, it is not set on the last page.
+          type: integer
+        previous:
+          description: |
+            Previous page number, it is not set on the first page.
+          type: integer
+        last:
+          description: Last page number.
+          type: integer
+        perPage:
+          description: How many items are displayed in the page.
+          type: integer
+        totalItems:
+          description: Total items found by the given query.
+          type: integer
+      required:
+      - totalItems
+      type: object
+    cursor_hrefs:
+      example:
+        next: https://openapi-generator.tech
+        last: https://openapi-generator.tech
+        previous: https://openapi-generator.tech
+        first: https://openapi-generator.tech
+      properties:
+        first:
+          format: uri
+          type: string
+        last:
+          format: uri
+          type: string
+        previous:
+          format: uri
+          type: string
+        next:
+          format: uri
+          type: string
+      required:
+      - first
+      type: object
+  securitySchemes:
+    token:
+      scheme: bearer
+      type: http
