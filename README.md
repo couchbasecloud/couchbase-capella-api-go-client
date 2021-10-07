@@ -90,15 +90,21 @@ Class | Method | HTTP request | Description
 *ClustersApi* | [**ClustersDeleteUser**](docs/ClustersApi.md#clustersdeleteuser) | **Delete** /v2/clusters/{id}/users/{username} | Delete Database User
 *ClustersApi* | [**ClustersGetAllowlist**](docs/ClustersApi.md#clustersgetallowlist) | **Get** /v2/clusters/{id}/allowlist | Get current allowlist
 *ClustersApi* | [**ClustersGetCertificate**](docs/ClustersApi.md#clustersgetcertificate) | **Get** /v2/clusters/{id}/certificate | Get Cluster Certificate
+*ClustersApi* | [**ClustersHealth**](docs/ClustersApi.md#clustershealth) | **Get** /v2/clusters/{id}/health | Get Cluster Health
 *ClustersApi* | [**ClustersList**](docs/ClustersApi.md#clusterslist) | **Get** /v2/clusters | List Clusters
 *ClustersApi* | [**ClustersListBuckets**](docs/ClustersApi.md#clusterslistbuckets) | **Get** /v2/clusters/{id}/buckets | List cluster buckets
 *ClustersApi* | [**ClustersListUsers**](docs/ClustersApi.md#clusterslistusers) | **Get** /v2/clusters/{id}/users | List Database Users
 *ClustersApi* | [**ClustersShow**](docs/ClustersApi.md#clustersshow) | **Get** /v2/clusters/{id} | Get Cluster
+*ClustersApi* | [**ClustersStatus**](docs/ClustersApi.md#clustersstatus) | **Get** /v2/clusters/{id}/status | Get Cluster Status
+*ClustersApi* | [**ClustersUpdateAllowlist**](docs/ClustersApi.md#clustersupdateallowlist) | **Put** /v2/clusters/{id}/allowlist | Update the allowlist for a cluster
+*ClustersApi* | [**ClustersUpdateBucket**](docs/ClustersApi.md#clustersupdatebucket) | **Put** /v2/clusters/{id}/buckets | Update bucket in cluster
+*ClustersApi* | [**ClustersUpdateUser**](docs/ClustersApi.md#clustersupdateuser) | **Put** /v2/clusters/{id}/users/{username} | Update Database User
 *ProjectsApi* | [**ProjectsCreate**](docs/ProjectsApi.md#projectscreate) | **Post** /v2/projects | Create project
 *ProjectsApi* | [**ProjectsDelete**](docs/ProjectsApi.md#projectsdelete) | **Delete** /v2/projects/{id} | Delete project
 *ProjectsApi* | [**ProjectsList**](docs/ProjectsApi.md#projectslist) | **Get** /v2/projects | List Projects
 *ProjectsApi* | [**ProjectsShow**](docs/ProjectsApi.md#projectsshow) | **Get** /v2/projects/{id} | Get project by ID
 *StatusApi* | [**StatusShow**](docs/StatusApi.md#statusshow) | **Get** /v2/status | API status
+*UsersApi* | [**UsersList**](docs/UsersApi.md#userslist) | **Get** /v2/users | List Users
 
 
 ## Documentation For Models
@@ -116,6 +122,7 @@ Class | Method | HTTP request | Description
  - [AzureVolumeTypes](docs/AzureVolumeTypes.md)
  - [BucketRole](docs/BucketRole.md)
  - [BucketRoleTypes](docs/BucketRoleTypes.md)
+ - [BucketStats](docs/BucketStats.md)
  - [Cloud](docs/Cloud.md)
  - [CloudProviderSettings](docs/CloudProviderSettings.md)
  - [CloudStatus](docs/CloudStatus.md)
@@ -123,8 +130,12 @@ Class | Method | HTTP request | Description
  - [CloudVersion](docs/CloudVersion.md)
  - [Cluster](docs/Cluster.md)
  - [ClusterHealth](docs/ClusterHealth.md)
+ - [ClusterHealthResponse](docs/ClusterHealthResponse.md)
  - [ClusterStatus](docs/ClusterStatus.md)
+ - [ClusterStatusResponse](docs/ClusterStatusResponse.md)
  - [ClusterSummary](docs/ClusterSummary.md)
+ - [ClusterVersion](docs/ClusterVersion.md)
+ - [ClusterVersions](docs/ClusterVersions.md)
  - [ConflictResolution](docs/ConflictResolution.md)
  - [CouchbaseBucketSpec](docs/CouchbaseBucketSpec.md)
  - [CouchbaseServices](docs/CouchbaseServices.md)
@@ -144,15 +155,20 @@ Class | Method | HTTP request | Description
  - [ListClustersResponse](docs/ListClustersResponse.md)
  - [ListDatabaseUsersResponseItem](docs/ListDatabaseUsersResponseItem.md)
  - [ListProjectsResponse](docs/ListProjectsResponse.md)
+ - [ListUsersResponse](docs/ListUsersResponse.md)
+ - [ListUsersResponseItem](docs/ListUsersResponseItem.md)
+ - [NodeStats](docs/NodeStats.md)
  - [Project](docs/Project.md)
  - [Provider](docs/Provider.md)
  - [Regions](docs/Regions.md)
  - [Server](docs/Server.md)
  - [ServerAws](docs/ServerAws.md)
  - [ServerAzure](docs/ServerAzure.md)
+ - [ServiceStats](docs/ServiceStats.md)
  - [StatusOK](docs/StatusOK.md)
  - [SupportPackageType](docs/SupportPackageType.md)
  - [SupportTimezones](docs/SupportTimezones.md)
+ - [UpdateDatabaseUserRequest](docs/UpdateDatabaseUserRequest.md)
 
 
 ## Documentation For Authorization

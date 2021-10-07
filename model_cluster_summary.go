@@ -21,8 +21,6 @@ type ClusterSummary struct {
 	TenantId string `json:"tenantId"`
 	CloudId string `json:"cloudId"`
 	ProjectId string `json:"projectId"`
-	Status ClusterStatus `json:"status"`
-	Health ClusterHealth `json:"health"`
 	Services []CouchbaseServices `json:"services"`
 	Nodes int32 `json:"nodes"`
 }
@@ -31,15 +29,13 @@ type ClusterSummary struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewClusterSummary(id string, name string, tenantId string, cloudId string, projectId string, status ClusterStatus, health ClusterHealth, services []CouchbaseServices, nodes int32) *ClusterSummary {
+func NewClusterSummary(id string, name string, tenantId string, cloudId string, projectId string, services []CouchbaseServices, nodes int32) *ClusterSummary {
 	this := ClusterSummary{}
 	this.Id = id
 	this.Name = name
 	this.TenantId = tenantId
 	this.CloudId = cloudId
 	this.ProjectId = projectId
-	this.Status = status
-	this.Health = health
 	this.Services = services
 	this.Nodes = nodes
 	return &this
@@ -173,54 +169,6 @@ func (o *ClusterSummary) SetProjectId(v string) {
 	o.ProjectId = v
 }
 
-// GetStatus returns the Status field value
-func (o *ClusterSummary) GetStatus() ClusterStatus {
-	if o == nil {
-		var ret ClusterStatus
-		return ret
-	}
-
-	return o.Status
-}
-
-// GetStatusOk returns a tuple with the Status field value
-// and a boolean to check if the value has been set.
-func (o *ClusterSummary) GetStatusOk() (*ClusterStatus, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Status, true
-}
-
-// SetStatus sets field value
-func (o *ClusterSummary) SetStatus(v ClusterStatus) {
-	o.Status = v
-}
-
-// GetHealth returns the Health field value
-func (o *ClusterSummary) GetHealth() ClusterHealth {
-	if o == nil {
-		var ret ClusterHealth
-		return ret
-	}
-
-	return o.Health
-}
-
-// GetHealthOk returns a tuple with the Health field value
-// and a boolean to check if the value has been set.
-func (o *ClusterSummary) GetHealthOk() (*ClusterHealth, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Health, true
-}
-
-// SetHealth sets field value
-func (o *ClusterSummary) SetHealth(v ClusterHealth) {
-	o.Health = v
-}
-
 // GetServices returns the Services field value
 func (o *ClusterSummary) GetServices() []CouchbaseServices {
 	if o == nil {
@@ -285,12 +233,6 @@ func (o ClusterSummary) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["projectId"] = o.ProjectId
-	}
-	if true {
-		toSerialize["status"] = o.Status
-	}
-	if true {
-		toSerialize["health"] = o.Health
 	}
 	if true {
 		toSerialize["services"] = o.Services

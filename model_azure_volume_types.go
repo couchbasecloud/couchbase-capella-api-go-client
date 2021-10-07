@@ -26,6 +26,10 @@ const (
 	P15 AzureVolumeTypes = "P15"
 	P20 AzureVolumeTypes = "P20"
 	P30 AzureVolumeTypes = "P30"
+	P40 AzureVolumeTypes = "P40"
+	P50 AzureVolumeTypes = "P50"
+	P60 AzureVolumeTypes = "P60"
+	P70 AzureVolumeTypes = "P70"
 )
 
 var allowedAzureVolumeTypesEnumValues = []AzureVolumeTypes{
@@ -35,6 +39,10 @@ var allowedAzureVolumeTypesEnumValues = []AzureVolumeTypes{
 	"P15",
 	"P20",
 	"P30",
+	"P40",
+	"P50",
+	"P60",
+	"P70",
 }
 
 func (v *AzureVolumeTypes) UnmarshalJSON(src []byte) error {

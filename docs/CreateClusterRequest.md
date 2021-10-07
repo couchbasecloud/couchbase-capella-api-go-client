@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **ProjectId** | **string** |  | 
 **Servers** | Pointer to [**[]Server**](Server.md) |  | [optional] 
 **SupportPackage** | Pointer to [**CreateClusterRequestSupportPackage**](CreateClusterRequestSupportPackage.md) |  | [optional] 
-**Version** | Pointer to **string** | If not defined the latest version of Couchbase Server is deployed.  | [optional] 
+**Version** | Pointer to [**ClusterVersions**](ClusterVersions.md) |  | [optional] 
 
 ## Methods
 
@@ -142,20 +142,20 @@ HasSupportPackage returns a boolean if a field has been set.
 
 ### GetVersion
 
-`func (o *CreateClusterRequest) GetVersion() string`
+`func (o *CreateClusterRequest) GetVersion() ClusterVersions`
 
 GetVersion returns the Version field if non-nil, zero value otherwise.
 
 ### GetVersionOk
 
-`func (o *CreateClusterRequest) GetVersionOk() (*string, bool)`
+`func (o *CreateClusterRequest) GetVersionOk() (*ClusterVersions, bool)`
 
 GetVersionOk returns a tuple with the Version field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetVersion
 
-`func (o *CreateClusterRequest) SetVersion(v string)`
+`func (o *CreateClusterRequest) SetVersion(v ClusterVersions)`
 
 SetVersion sets Version field to given value.
 

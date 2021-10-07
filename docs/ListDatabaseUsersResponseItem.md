@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**UserId** | Pointer to **string** | Organisation user ID Database user is attached to  | [optional] 
+**UserId** | Pointer to **string** | Organization user ID Database user is attached to  | [optional] 
 **Username** | **string** |  | 
 **Access** | [**[]BucketRole**](BucketRole.md) |  | 
 

@@ -7,17 +7,17 @@ Name | Type | Description | Notes
 **CidrBlock** | **string** |  | 
 **RuleType** | [**AllowListRules**](AllowListRules.md) |  | 
 **Duration** | Pointer to **string** |  | [optional] 
-**CreatedAt** | **time.Time** |  | 
+**CreatedAt** | Pointer to **time.Time** |  | [optional] 
 **ExpiresAt** | Pointer to **time.Time** |  | [optional] 
-**UpdatedAt** | **time.Time** |  | 
-**Comment** | **string** |  | 
-**State** | [**AllowListStates**](AllowListStates.md) |  | 
+**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
+**Comment** | Pointer to **string** |  | [optional] 
+**State** | Pointer to [**AllowListStates**](AllowListStates.md) |  | [optional] 
 
 ## Methods
 
 ### NewAllowListEntry
 
-`func NewAllowListEntry(cidrBlock string, ruleType AllowListRules, createdAt time.Time, updatedAt time.Time, comment string, state AllowListStates, ) *AllowListEntry`
+`func NewAllowListEntry(cidrBlock string, ruleType AllowListRules, ) *AllowListEntry`
 
 NewAllowListEntry instantiates a new AllowListEntry object
 This constructor will assign default values to properties that have it defined,
@@ -116,6 +116,11 @@ and a boolean to check if the value has been set.
 
 SetCreatedAt sets CreatedAt field to given value.
 
+### HasCreatedAt
+
+`func (o *AllowListEntry) HasCreatedAt() bool`
+
+HasCreatedAt returns a boolean if a field has been set.
 
 ### GetExpiresAt
 
@@ -161,6 +166,11 @@ and a boolean to check if the value has been set.
 
 SetUpdatedAt sets UpdatedAt field to given value.
 
+### HasUpdatedAt
+
+`func (o *AllowListEntry) HasUpdatedAt() bool`
+
+HasUpdatedAt returns a boolean if a field has been set.
 
 ### GetComment
 
@@ -181,6 +191,11 @@ and a boolean to check if the value has been set.
 
 SetComment sets Comment field to given value.
 
+### HasComment
+
+`func (o *AllowListEntry) HasComment() bool`
+
+HasComment returns a boolean if a field has been set.
 
 ### GetState
 
@@ -201,6 +216,11 @@ and a boolean to check if the value has been set.
 
 SetState sets State field to given value.
 
+### HasState
+
+`func (o *AllowListEntry) HasState() bool`
+
+HasState returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

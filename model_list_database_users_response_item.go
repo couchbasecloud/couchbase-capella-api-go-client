@@ -16,7 +16,7 @@ import (
 
 // ListDatabaseUsersResponseItem struct for ListDatabaseUsersResponseItem
 type ListDatabaseUsersResponseItem struct {
-	// Organisation user ID Database user is attached to 
+	// Organization user ID Database user is attached to 
 	UserId *string `json:"userId,omitempty"`
 	Username string `json:"username"`
 	Access []BucketRole `json:"access"`

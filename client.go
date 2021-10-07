@@ -59,6 +59,8 @@ type APIClient struct {
 	ProjectsApi *ProjectsApiService
 
 	StatusApi *StatusApiService
+
+	UsersApi *UsersApiService
 }
 
 type service struct {
@@ -81,6 +83,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.ClustersApi = (*ClustersApiService)(&c.common)
 	c.ProjectsApi = (*ProjectsApiService)(&c.common)
 	c.StatusApi = (*StatusApiService)(&c.common)
+	c.UsersApi = (*UsersApiService)(&c.common)
 
 	return c
 }
@@ -361,6 +364,7 @@ func (c *APIClient) prepareRequest(
 			localVarRequest.Header.Add("Authorization", "Bearer "+bearerToken)
 			localVarRequest.Header.Add("Couchbase-Timestamp", timestamp)
 		}
+
 	}
 
 	for header, value := range c.cfg.DefaultHeader {

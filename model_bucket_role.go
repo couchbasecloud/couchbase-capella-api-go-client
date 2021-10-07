@@ -14,21 +14,21 @@ import (
 	"encoding/json"
 )
 
-// BucketRole Specifies the roles of the user for the given bucket If name is blank, the permission would apply to all buckets on the database for the user. 
+// BucketRole Specifies the roles of the user for the given bucket 
 type BucketRole struct {
 	// Bucket Name
-	Name string `json:"name"`
-	Roles []BucketRoleTypes `json:"roles"`
+	BucketName string `json:"bucketName"`
+	BucketAccess []BucketRoleTypes `json:"bucketAccess"`
 }
 
 // NewBucketRole instantiates a new BucketRole object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewBucketRole(name string, roles []BucketRoleTypes) *BucketRole {
+func NewBucketRole(bucketName string, bucketAccess []BucketRoleTypes) *BucketRole {
 	this := BucketRole{}
-	this.Name = name
-	this.Roles = roles
+	this.BucketName = bucketName
+	this.BucketAccess = bucketAccess
 	return &this
 }
 
@@ -40,61 +40,61 @@ func NewBucketRoleWithDefaults() *BucketRole {
 	return &this
 }
 
-// GetName returns the Name field value
-func (o *BucketRole) GetName() string {
+// GetBucketName returns the BucketName field value
+func (o *BucketRole) GetBucketName() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Name
+	return o.BucketName
 }
 
-// GetNameOk returns a tuple with the Name field value
+// GetBucketNameOk returns a tuple with the BucketName field value
 // and a boolean to check if the value has been set.
-func (o *BucketRole) GetNameOk() (*string, bool) {
+func (o *BucketRole) GetBucketNameOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.Name, true
+	return &o.BucketName, true
 }
 
-// SetName sets field value
-func (o *BucketRole) SetName(v string) {
-	o.Name = v
+// SetBucketName sets field value
+func (o *BucketRole) SetBucketName(v string) {
+	o.BucketName = v
 }
 
-// GetRoles returns the Roles field value
-func (o *BucketRole) GetRoles() []BucketRoleTypes {
+// GetBucketAccess returns the BucketAccess field value
+func (o *BucketRole) GetBucketAccess() []BucketRoleTypes {
 	if o == nil {
 		var ret []BucketRoleTypes
 		return ret
 	}
 
-	return o.Roles
+	return o.BucketAccess
 }
 
-// GetRolesOk returns a tuple with the Roles field value
+// GetBucketAccessOk returns a tuple with the BucketAccess field value
 // and a boolean to check if the value has been set.
-func (o *BucketRole) GetRolesOk() (*[]BucketRoleTypes, bool) {
+func (o *BucketRole) GetBucketAccessOk() (*[]BucketRoleTypes, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.Roles, true
+	return &o.BucketAccess, true
 }
 
-// SetRoles sets field value
-func (o *BucketRole) SetRoles(v []BucketRoleTypes) {
-	o.Roles = v
+// SetBucketAccess sets field value
+func (o *BucketRole) SetBucketAccess(v []BucketRoleTypes) {
+	o.BucketAccess = v
 }
 
 func (o BucketRole) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
-		toSerialize["name"] = o.Name
+		toSerialize["bucketName"] = o.BucketName
 	}
 	if true {
-		toSerialize["roles"] = o.Roles
+		toSerialize["bucketAccess"] = o.BucketAccess
 	}
 	return json.Marshal(toSerialize)
 }

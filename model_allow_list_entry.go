@@ -20,25 +20,21 @@ type AllowListEntry struct {
 	CidrBlock string `json:"cidrBlock"`
 	RuleType AllowListRules `json:"ruleType"`
 	Duration *string `json:"duration,omitempty"`
-	CreatedAt time.Time `json:"createdAt"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	Comment string `json:"comment"`
-	State AllowListStates `json:"state"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	Comment *string `json:"comment,omitempty"`
+	State *AllowListStates `json:"state,omitempty"`
 }
 
 // NewAllowListEntry instantiates a new AllowListEntry object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAllowListEntry(cidrBlock string, ruleType AllowListRules, createdAt time.Time, updatedAt time.Time, comment string, state AllowListStates) *AllowListEntry {
+func NewAllowListEntry(cidrBlock string, ruleType AllowListRules) *AllowListEntry {
 	this := AllowListEntry{}
 	this.CidrBlock = cidrBlock
 	this.RuleType = ruleType
-	this.CreatedAt = createdAt
-	this.UpdatedAt = updatedAt
-	this.Comment = comment
-	this.State = state
 	return &this
 }
 
@@ -130,28 +126,36 @@ func (o *AllowListEntry) SetDuration(v string) {
 	o.Duration = &v
 }
 
-// GetCreatedAt returns the CreatedAt field value
+// GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *AllowListEntry) GetCreatedAt() time.Time {
-	if o == nil {
+	if o == nil || o.CreatedAt == nil {
 		var ret time.Time
 		return ret
 	}
-
-	return o.CreatedAt
+	return *o.CreatedAt
 }
 
-// GetCreatedAtOk returns a tuple with the CreatedAt field value
+// GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AllowListEntry) GetCreatedAtOk() (*time.Time, bool) {
-	if o == nil  {
+	if o == nil || o.CreatedAt == nil {
 		return nil, false
 	}
-	return &o.CreatedAt, true
+	return o.CreatedAt, true
 }
 
-// SetCreatedAt sets field value
+// HasCreatedAt returns a boolean if a field has been set.
+func (o *AllowListEntry) HasCreatedAt() bool {
+	if o != nil && o.CreatedAt != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
 func (o *AllowListEntry) SetCreatedAt(v time.Time) {
-	o.CreatedAt = v
+	o.CreatedAt = &v
 }
 
 // GetExpiresAt returns the ExpiresAt field value if set, zero value otherwise.
@@ -186,76 +190,100 @@ func (o *AllowListEntry) SetExpiresAt(v time.Time) {
 	o.ExpiresAt = &v
 }
 
-// GetUpdatedAt returns the UpdatedAt field value
+// GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
 func (o *AllowListEntry) GetUpdatedAt() time.Time {
-	if o == nil {
+	if o == nil || o.UpdatedAt == nil {
 		var ret time.Time
 		return ret
 	}
-
-	return o.UpdatedAt
+	return *o.UpdatedAt
 }
 
-// GetUpdatedAtOk returns a tuple with the UpdatedAt field value
+// GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AllowListEntry) GetUpdatedAtOk() (*time.Time, bool) {
-	if o == nil  {
+	if o == nil || o.UpdatedAt == nil {
 		return nil, false
 	}
-	return &o.UpdatedAt, true
+	return o.UpdatedAt, true
 }
 
-// SetUpdatedAt sets field value
+// HasUpdatedAt returns a boolean if a field has been set.
+func (o *AllowListEntry) HasUpdatedAt() bool {
+	if o != nil && o.UpdatedAt != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
 func (o *AllowListEntry) SetUpdatedAt(v time.Time) {
-	o.UpdatedAt = v
+	o.UpdatedAt = &v
 }
 
-// GetComment returns the Comment field value
+// GetComment returns the Comment field value if set, zero value otherwise.
 func (o *AllowListEntry) GetComment() string {
-	if o == nil {
+	if o == nil || o.Comment == nil {
 		var ret string
 		return ret
 	}
-
-	return o.Comment
+	return *o.Comment
 }
 
-// GetCommentOk returns a tuple with the Comment field value
+// GetCommentOk returns a tuple with the Comment field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AllowListEntry) GetCommentOk() (*string, bool) {
-	if o == nil  {
+	if o == nil || o.Comment == nil {
 		return nil, false
 	}
-	return &o.Comment, true
+	return o.Comment, true
 }
 
-// SetComment sets field value
+// HasComment returns a boolean if a field has been set.
+func (o *AllowListEntry) HasComment() bool {
+	if o != nil && o.Comment != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetComment gets a reference to the given string and assigns it to the Comment field.
 func (o *AllowListEntry) SetComment(v string) {
-	o.Comment = v
+	o.Comment = &v
 }
 
-// GetState returns the State field value
+// GetState returns the State field value if set, zero value otherwise.
 func (o *AllowListEntry) GetState() AllowListStates {
-	if o == nil {
+	if o == nil || o.State == nil {
 		var ret AllowListStates
 		return ret
 	}
-
-	return o.State
+	return *o.State
 }
 
-// GetStateOk returns a tuple with the State field value
+// GetStateOk returns a tuple with the State field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *AllowListEntry) GetStateOk() (*AllowListStates, bool) {
-	if o == nil  {
+	if o == nil || o.State == nil {
 		return nil, false
 	}
-	return &o.State, true
+	return o.State, true
 }
 
-// SetState sets field value
+// HasState returns a boolean if a field has been set.
+func (o *AllowListEntry) HasState() bool {
+	if o != nil && o.State != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetState gets a reference to the given AllowListStates and assigns it to the State field.
 func (o *AllowListEntry) SetState(v AllowListStates) {
-	o.State = v
+	o.State = &v
 }
 
 func (o AllowListEntry) MarshalJSON() ([]byte, error) {
@@ -269,19 +297,19 @@ func (o AllowListEntry) MarshalJSON() ([]byte, error) {
 	if o.Duration != nil {
 		toSerialize["duration"] = o.Duration
 	}
-	if true {
+	if o.CreatedAt != nil {
 		toSerialize["createdAt"] = o.CreatedAt
 	}
 	if o.ExpiresAt != nil {
 		toSerialize["expiresAt"] = o.ExpiresAt
 	}
-	if true {
+	if o.UpdatedAt != nil {
 		toSerialize["updatedAt"] = o.UpdatedAt
 	}
-	if true {
+	if o.Comment != nil {
 		toSerialize["comment"] = o.Comment
 	}
-	if true {
+	if o.State != nil {
 		toSerialize["state"] = o.State
 	}
 	return json.Marshal(toSerialize)

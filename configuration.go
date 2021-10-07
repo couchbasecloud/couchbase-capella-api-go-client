@@ -108,14 +108,6 @@ func NewConfiguration() *Configuration {
 				URL: "https://cloudapi.cloud.couchbase.com",
 				Description: "No description provided",
 			},
-			{
-				URL: "https://cloudapi.stage.nonprod-project-avengers.com",
-				Description: "No description provided",
-			},
-			{
-				URL: "https://cloudapi.dev.nonprod-project-avengers.com",
-				Description: "No description provided",
-			},
 		},
 		OperationServers: map[string]ServerConfigurations{
 		},

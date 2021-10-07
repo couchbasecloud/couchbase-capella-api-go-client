@@ -16,22 +16,22 @@ import (
 
 // CreateDatabaseUserRequest struct for CreateDatabaseUserRequest
 type CreateDatabaseUserRequest struct {
-	// Organisation user which is assigned to the database user. 
+	// Organization user which is assigned to the database user. 
 	UserId *string `json:"userId,omitempty"`
 	Username string `json:"username"`
 	Password string `json:"password"`
-	Access []BucketRole `json:"access"`
+	Buckets *[]BucketRole `json:"buckets,omitempty"`
+	AllBucketsAccess *BucketRoleTypes `json:"allBucketsAccess,omitempty"`
 }
 
 // NewCreateDatabaseUserRequest instantiates a new CreateDatabaseUserRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateDatabaseUserRequest(username string, password string, access []BucketRole) *CreateDatabaseUserRequest {
+func NewCreateDatabaseUserRequest(username string, password string) *CreateDatabaseUserRequest {
 	this := CreateDatabaseUserRequest{}
 	this.Username = username
 	this.Password = password
-	this.Access = access
 	return &this
 }
 
@@ -123,28 +123,68 @@ func (o *CreateDatabaseUserRequest) SetPassword(v string) {
 	o.Password = v
 }
 
-// GetAccess returns the Access field value
-func (o *CreateDatabaseUserRequest) GetAccess() []BucketRole {
-	if o == nil {
+// GetBuckets returns the Buckets field value if set, zero value otherwise.
+func (o *CreateDatabaseUserRequest) GetBuckets() []BucketRole {
+	if o == nil || o.Buckets == nil {
 		var ret []BucketRole
 		return ret
 	}
-
-	return o.Access
+	return *o.Buckets
 }
 
-// GetAccessOk returns a tuple with the Access field value
+// GetBucketsOk returns a tuple with the Buckets field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CreateDatabaseUserRequest) GetAccessOk() (*[]BucketRole, bool) {
-	if o == nil  {
+func (o *CreateDatabaseUserRequest) GetBucketsOk() (*[]BucketRole, bool) {
+	if o == nil || o.Buckets == nil {
 		return nil, false
 	}
-	return &o.Access, true
+	return o.Buckets, true
 }
 
-// SetAccess sets field value
-func (o *CreateDatabaseUserRequest) SetAccess(v []BucketRole) {
-	o.Access = v
+// HasBuckets returns a boolean if a field has been set.
+func (o *CreateDatabaseUserRequest) HasBuckets() bool {
+	if o != nil && o.Buckets != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetBuckets gets a reference to the given []BucketRole and assigns it to the Buckets field.
+func (o *CreateDatabaseUserRequest) SetBuckets(v []BucketRole) {
+	o.Buckets = &v
+}
+
+// GetAllBucketsAccess returns the AllBucketsAccess field value if set, zero value otherwise.
+func (o *CreateDatabaseUserRequest) GetAllBucketsAccess() BucketRoleTypes {
+	if o == nil || o.AllBucketsAccess == nil {
+		var ret BucketRoleTypes
+		return ret
+	}
+	return *o.AllBucketsAccess
+}
+
+// GetAllBucketsAccessOk returns a tuple with the AllBucketsAccess field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CreateDatabaseUserRequest) GetAllBucketsAccessOk() (*BucketRoleTypes, bool) {
+	if o == nil || o.AllBucketsAccess == nil {
+		return nil, false
+	}
+	return o.AllBucketsAccess, true
+}
+
+// HasAllBucketsAccess returns a boolean if a field has been set.
+func (o *CreateDatabaseUserRequest) HasAllBucketsAccess() bool {
+	if o != nil && o.AllBucketsAccess != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetAllBucketsAccess gets a reference to the given BucketRoleTypes and assigns it to the AllBucketsAccess field.
+func (o *CreateDatabaseUserRequest) SetAllBucketsAccess(v BucketRoleTypes) {
+	o.AllBucketsAccess = &v
 }
 
 func (o CreateDatabaseUserRequest) MarshalJSON() ([]byte, error) {
@@ -158,8 +198,11 @@ func (o CreateDatabaseUserRequest) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["password"] = o.Password
 	}
-	if true {
-		toSerialize["access"] = o.Access
+	if o.Buckets != nil {
+		toSerialize["buckets"] = o.Buckets
+	}
+	if o.AllBucketsAccess != nil {
+		toSerialize["allBucketsAccess"] = o.AllBucketsAccess
 	}
 	return json.Marshal(toSerialize)
 }

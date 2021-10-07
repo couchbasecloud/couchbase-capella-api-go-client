@@ -4,8 +4,6 @@ info:
   version: 2.0.0
 servers:
 - url: https://cloudapi.cloud.couchbase.com
-- url: https://cloudapi.stage.nonprod-project-avengers.com
-- url: https://cloudapi.dev.nonprod-project-avengers.com
 security:
 - token: []
 paths:
@@ -134,6 +132,67 @@ paths:
       summary: Get Cloud
       tags:
       - clouds
+  /v2/users:
+    get:
+      description: |
+        Return a paginated list of organization Users.
+      operationId: users/list
+      parameters:
+      - description: Sets how many results you would like to have on each page
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Sets what page you would like to view
+        explode: true
+        in: query
+        name: perPage
+        required: false
+        schema:
+          type: integer
+        style: form
+      - allowReserved: true
+        description: Sets order of how you would like to sort results and also the
+          key you would like to order by
+        example: name.desc
+        explode: true
+        in: query
+        name: sortBy
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUsersResponse'
+          description: Success
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: List Users
+      tags:
+      - users
   /v2/projects:
     get:
       description: Returns a paginated list of projects created by the tenant
@@ -203,7 +262,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateProjectRequest'
       responses:
-        "200":
+        "201":
           content:
             application/json:
               schema:
@@ -327,7 +386,7 @@ paths:
   /v2/clusters:
     get:
       description: |
-        Return a paginated list of organisation Clusters.
+        Return a paginated list of organization Clusters.
       operationId: clusters/list
       parameters:
       - description: Sets how many results you would like to have on each page
@@ -416,12 +475,16 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateClusterRequest'
       responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Cluster'
+        "202":
           description: Success
+          headers:
+            Location:
+              description: |
+                reference to created Cluster
+              explode: false
+              schema:
+                type: string
+              style: simple
         "403":
           content:
             application/json:
@@ -459,8 +522,16 @@ paths:
           type: string
         style: simple
       responses:
-        "204":
+        "202":
           description: Successfully started delete cluster job
+          headers:
+            Location:
+              description: |
+                reference to Cluster to be deleted
+              explode: false
+              schema:
+                type: string
+              style: simple
         "403":
           content:
             application/json:
@@ -552,8 +623,16 @@ paths:
             schema:
               $ref: '#/components/schemas/DeleteBucketRequest'
       responses:
-        "204":
+        "202":
           description: Successfully deleted bucket
+          headers:
+            Location:
+              description: |
+                reference to deleted bucket
+              explode: false
+              schema:
+                type: string
+              style: simple
         "403":
           content:
             application/json:
@@ -656,6 +735,86 @@ paths:
                 $ref: '#/components/schemas/goof'
           description: Internal server error
       summary: Create bucket in cluster
+      tags:
+      - clusters
+    put:
+      description: Updates bucket in cluster specified with cluster id parameter
+      operationId: clusters/update-bucket
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBucketSpec'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CouchbaseBucketSpec'
+          description: Successfully updated bucket
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Update bucket in cluster
+      tags:
+      - clusters
+  /v2/clusters/{id}/health:
+    get:
+      description: |
+        Retrieve Cluster health and status. Health stats of the cluster are returned only for clusters with `ready` status.
+      operationId: clusters/health
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClusterHealthResponse'
+          description: |
+            Current Cluster Health and Status
+      summary: Get Cluster Health
       tags:
       - clusters
   /v2/clusters/{id}/allowlist:
@@ -776,7 +935,7 @@ paths:
             schema:
               $ref: '#/components/schemas/AppendAllowListRequest'
       responses:
-        "204":
+        "202":
           description: Successfully appended entry to allowlist
         "403":
           content:
@@ -803,6 +962,55 @@ paths:
                 $ref: '#/components/schemas/goof'
           description: Internal server error
       summary: Adds entry to allowlist
+      tags:
+      - clusters
+    put:
+      description: Updates allow list to received payload
+      operationId: clusters/update-allowlist
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAllowListRequest'
+      responses:
+        "202":
+          description: Successfully update allowlist
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Update the allowlist for a cluster
       tags:
       - clusters
   /v2/clusters/{id}/certificate:
@@ -850,6 +1058,51 @@ paths:
       summary: Get Cluster Certificate
       tags:
       - clusters
+  /v2/clusters/{id}/status:
+    get:
+      description: |
+        Returns Cluster Status
+      operationId: clusters/status
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClusterStatusResponse'
+          description: |
+            Cluster Status
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Get Cluster Status
+      tags:
+      - clusters
   /v2/clusters/{id}/users/{username}:
     delete:
       description: |
@@ -873,7 +1126,7 @@ paths:
         name: username
         required: true
         schema:
-          type: string
+          $ref: '#/components/schemas/DBUserUsername'
         style: simple
       responses:
         "204":
@@ -897,6 +1150,65 @@ paths:
                 $ref: '#/components/schemas/goof'
           description: Internal server error
       summary: Delete Database User
+      tags:
+      - clusters
+    put:
+      description: |
+        Update a Cluster's Database User
+      operationId: clusters/update-user
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Database User username
+        example: foobar
+        explode: false
+        in: path
+        name: username
+        required: true
+        schema:
+          $ref: '#/components/schemas/DBUserUsername'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDatabaseUserRequest'
+      responses:
+        "204":
+          description: Successfully updated Database User
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Update Database User
       tags:
       - clusters
   /v2/clusters/{id}/users:
@@ -1266,6 +1578,56 @@ components:
       - components
       - name
       type: object
+    ListUsersResponse:
+      example:
+        cursor:
+          pages:
+            next: 6
+            totalItems: 2
+            perPage: 5
+            previous: 1
+            last: 5
+            page: 0
+          hrefs:
+            next: https://openapi-generator.tech
+            last: https://openapi-generator.tech
+            previous: https://openapi-generator.tech
+            first: https://openapi-generator.tech
+        data:
+        - name: name
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          email: email
+        - name: name
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          email: email
+      properties:
+        cursor:
+          $ref: '#/components/schemas/cursor'
+        data:
+          items:
+            $ref: '#/components/schemas/ListUsersResponseItem'
+          type: array
+      required:
+      - cursor
+      - data
+      type: object
+    ListUsersResponseItem:
+      example:
+        name: name
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        email: email
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+      required:
+      - email
+      - id
+      - name
     ListProjectsResponse:
       example:
         cursor:
@@ -1411,10 +1773,6 @@ components:
         projectId:
           format: uuid
           type: string
-        status:
-          $ref: '#/components/schemas/clusterStatus'
-        health:
-          $ref: '#/components/schemas/clusterHealth'
         services:
           items:
             $ref: '#/components/schemas/couchbaseServices'
@@ -1423,40 +1781,11 @@ components:
           type: integer
       required:
       - cloudId
-      - health
       - id
       - name
       - nodes
       - projectId
       - services
-      - status
-      - tenantId
-      type: object
-    Cluster:
-      example:
-        cloudId: cloudId
-        name: name
-        tenantId: tenantId
-        id: id
-        projectId: projectId
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        tenantId:
-          type: string
-        cloudId:
-          type: string
-        projectId:
-          type: string
-        status:
-          $ref: '#/components/schemas/clusterStatus'
-      required:
-      - cloudId
-      - id
-      - name
-      - projectId
       - status
       - tenantId
       type: object
@@ -1468,20 +1797,19 @@ components:
           - null
           - null
           aws:
-            ebsSizeGib: 9876
+            ebsSizeGib: 9895
           azure: {}
         - size: 3
           services:
           - null
           - null
           aws:
-            ebsSizeGib: 9876
+            ebsSizeGib: 9895
           azure: {}
         supportPackage: {}
         cloudId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         name: name
         projectId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        version: version
       properties:
         name:
           maximum: 128
@@ -1500,9 +1828,7 @@ components:
         supportPackage:
           $ref: '#/components/schemas/CreateClusterRequest_supportPackage'
         version:
-          description: |
-            If not defined the latest version of Couchbase Server is deployed.
-          type: string
+          $ref: '#/components/schemas/clusterVersions'
       required:
       - cloudId
       - name
@@ -1515,7 +1841,7 @@ components:
         - null
         - null
         aws:
-          ebsSizeGib: 9876
+          ebsSizeGib: 9895
         azure: {}
       properties:
         size:
@@ -1533,6 +1859,97 @@ components:
       required:
       - services
       - size
+      type: object
+    Cluster:
+      example:
+        endpointsSrv: endpointsSrv
+        endpointsURL:
+        - endpointsURL
+        - endpointsURL
+        version:
+          components:
+            key: components
+          name: name
+        deployedAt: 2000-01-23T04:56:07.000+00:00
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        resourceIdentifier: resourceIdentifier
+        privateEndpointURL:
+        - privateEndpointURL
+        - privateEndpointURL
+        cloudId: cloudId
+        name: name
+        tenantId: tenantId
+        id: id
+        projectId: projectId
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+        privateEndpointsSrv: privateEndpointsSrv
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        tenantId:
+          type: string
+        cloudId:
+          type: string
+        projectId:
+          type: string
+        status:
+          $ref: '#/components/schemas/clusterStatus'
+        resourceIdentifier:
+          description: |
+            Resource identifier name linked with the Cloud Provider
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        deployedAt:
+          format: date-time
+          type: string
+        version:
+          $ref: '#/components/schemas/ClusterVersion'
+        endpointsURL:
+          items:
+            type: string
+          type: array
+        privateEndpointURL:
+          items:
+            type: string
+          type: array
+        endpointsSrv:
+          type: string
+        privateEndpointsSrv:
+          type: string
+      required:
+      - cloudId
+      - id
+      - name
+      - projectId
+      - resourceIdentifier
+      - status
+      - tenantId
+      type: object
+    ClusterVersion:
+      example:
+        components:
+          key: components
+        name: name
+      properties:
+        name:
+          type: string
+        components:
+          additionalProperties:
+            type: string
+          properties:
+            default:
+              type: string
+          type: object
+      required:
+      - components
+      - name
       type: object
     ListBucketsResponse:
       items:
@@ -1586,6 +2003,10 @@ components:
       - memoryQuota
       - name
       type: object
+    UpdateBucketSpec:
+      items:
+        $ref: '#/components/schemas/CouchbaseBucketSpec'
+      type: array
     DeleteBucketRequest:
       example:
         name: name
@@ -1598,6 +2019,125 @@ components:
       required:
       - name
       type: object
+    ClusterHealthResponse:
+      example:
+        bucketStats:
+          healthStats:
+            key: healthStats
+          unhealthyCount: 6
+          totalCount: 0
+          status: status
+        nodeStats:
+          failedOverCount: 5
+          serviceStats:
+          - nodeName: nodeName
+            services:
+            - services
+            - services
+            status: status
+          - nodeName: nodeName
+            services:
+            - services
+            - services
+            status: status
+          unhealthyCount: 5
+          totalCount: 1
+          status: status
+      properties:
+        status:
+          $ref: '#/components/schemas/clusterStatus'
+        health:
+          $ref: '#/components/schemas/clusterHealth'
+        bucketStats:
+          $ref: '#/components/schemas/BucketStats'
+        nodeStats:
+          $ref: '#/components/schemas/NodeStats'
+      required:
+      - health
+      - status
+      type: object
+    BucketStats:
+      example:
+        healthStats:
+          key: healthStats
+        unhealthyCount: 6
+        totalCount: 0
+        status: status
+      properties:
+        status:
+          type: string
+        totalCount:
+          type: integer
+        unhealthyCount:
+          type: integer
+        healthStats:
+          additionalProperties:
+            type: string
+          type: object
+      required:
+      - healthStats
+      - status
+      - totalCount
+      - unhealthyCount
+      type: object
+    NodeStats:
+      example:
+        failedOverCount: 5
+        serviceStats:
+        - nodeName: nodeName
+          services:
+          - services
+          - services
+          status: status
+        - nodeName: nodeName
+          services:
+          - services
+          - services
+          status: status
+        unhealthyCount: 5
+        totalCount: 1
+        status: status
+      properties:
+        status:
+          type: string
+        totalCount:
+          type: integer
+        failedOverCount:
+          type: integer
+        unhealthyCount:
+          type: integer
+        serviceStats:
+          items:
+            $ref: '#/components/schemas/ServiceStats'
+          type: array
+      required:
+      - failedOverCount
+      - serviceStats
+      - status
+      - totalCount
+      - unhealthyCount
+      type: object
+    ServiceStats:
+      example:
+        nodeName: nodeName
+        services:
+        - services
+        - services
+        status: status
+      properties:
+        services:
+          items:
+            type: string
+          type: array
+        nodeName:
+          type: string
+        status:
+          type: string
+      required:
+      - nodeName
+      - services
+      - status
+      type: object
     ListAllowListResponse:
       items:
         $ref: '#/components/schemas/AllowListEntry'
@@ -1606,12 +2146,14 @@ components:
       example:
         duration: duration
         createdAt: 2000-01-23T04:56:07.000+00:00
-        cidrBlock: cidrBlock
+        cidrBlock: 0.0.0.0/32
         comment: comment
         expiresAt: 2000-01-23T04:56:07.000+00:00
         updatedAt: 2000-01-23T04:56:07.000+00:00
       properties:
         cidrBlock:
+          example: 0.0.0.0/32
+          minLength: 7
           type: string
         ruleType:
           $ref: '#/components/schemas/allowListRules'
@@ -1632,19 +2174,25 @@ components:
           $ref: '#/components/schemas/allowListStates'
       required:
       - cidrBlock
-      - comment
-      - createdAt
       - ruleType
-      - state
-      - updatedAt
       type: object
+    CIDR:
+      example: 0.0.0.0/32
+      minLength: 7
+      type: string
+    UpdateAllowListRequest:
+      items:
+        $ref: '#/components/schemas/AllowListEntry'
+      type: array
     AppendAllowListRequest:
       example:
         duration: 1h0m0s
-        cidrBlock: cidrBlock
+        cidrBlock: 0.0.0.0/32
         comment: comment
       properties:
         cidrBlock:
+          example: 0.0.0.0/32
+          minLength: 7
           type: string
         ruleType:
           $ref: '#/components/schemas/allowListRules'
@@ -1661,9 +2209,11 @@ components:
       type: object
     DeleteAllowListEntryRequest:
       example:
-        cidrBlock: cidrBlock
+        cidrBlock: 0.0.0.0/32
       properties:
         cidrBlock:
+          example: 0.0.0.0/32
+          minLength: 7
           type: string
       required:
       - cidrBlock
@@ -1680,6 +2230,74 @@ components:
       required:
       - certificate
       type: object
+    ClusterStatusResponse:
+      example: {}
+      properties:
+        status:
+          $ref: '#/components/schemas/clusterStatus'
+      required:
+      - status
+      type: object
+    UpdateDatabaseUserRequest:
+      example:
+        password: password
+        buckets:
+        - bucketAccess:
+          - null
+          - null
+          bucketName: bucketName
+        - bucketAccess:
+          - null
+          - null
+          bucketName: bucketName
+        userId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        username: username
+        allBucketsAccess: allBucketsAccess
+      properties:
+        userId:
+          description: |
+            Organization user to update which is assigned to the database user.
+          format: uuid
+          type: string
+        username:
+          maxLength: 128
+          minLength: 1
+          type: string
+        password:
+          type: string
+        buckets:
+          items:
+            $ref: '#/components/schemas/BucketRole'
+          type: array
+        allBucketsAccess:
+          $ref: '#/components/schemas/bucketRoleTypes'
+      type: object
+    DBUserUsername:
+      maxLength: 128
+      minLength: 1
+      type: string
+    BucketRole:
+      description: |
+        Specifies the roles of the user for the given bucket
+      example:
+        bucketAccess:
+        - null
+        - null
+        bucketName: bucketName
+      properties:
+        bucketName:
+          description: Bucket Name
+          type: string
+        bucketAccess:
+          items:
+            $ref: '#/components/schemas/bucketRoleTypes'
+          minimum: 1
+          type: array
+          uniqueItems: true
+      required:
+      - bucketAccess
+      - bucketName
+      type: object
     ListDatabaseUsersResponse:
       items:
         $ref: '#/components/schemas/ListDatabaseUsersResponseItem'
@@ -1687,23 +2305,25 @@ components:
     ListDatabaseUsersResponseItem:
       example:
         access:
-        - roles:
+        - bucketAccess:
           - null
           - null
-          name: name
-        - roles:
+          bucketName: bucketName
+        - bucketAccess:
           - null
           - null
-          name: name
+          bucketName: bucketName
         userId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         username: username
       properties:
         userId:
           description: |
-            Organisation user ID Database user is attached to
+            Organization user ID Database user is attached to
           format: uuid
           type: string
         username:
+          maxLength: 128
+          minLength: 1
           type: string
         access:
           items:
@@ -1713,58 +2333,40 @@ components:
       - access
       - username
       type: object
-    BucketRole:
-      description: |
-        Specifies the roles of the user for the given bucket If name is blank, the permission would apply to all buckets on the database for the user.
-      example:
-        roles:
-        - null
-        - null
-        name: name
-      properties:
-        name:
-          description: Bucket Name
-          type: string
-        roles:
-          items:
-            $ref: '#/components/schemas/bucketRoleTypes'
-          minimum: 1
-          type: array
-          uniqueItems: true
-      required:
-      - name
-      - roles
-      type: object
     CreateDatabaseUserRequest:
       example:
         password: password
-        access:
-        - roles:
+        buckets:
+        - bucketAccess:
           - null
           - null
-          name: name
-        - roles:
+          bucketName: bucketName
+        - bucketAccess:
           - null
           - null
-          name: name
+          bucketName: bucketName
         userId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         username: username
+        allBucketsAccess: allBucketsAccess
       properties:
         userId:
           description: |
-            Organisation user which is assigned to the database user.
+            Organization user which is assigned to the database user.
           format: uuid
           type: string
         username:
+          maxLength: 128
+          minLength: 1
           type: string
         password:
           type: string
-        access:
+        buckets:
           items:
             $ref: '#/components/schemas/BucketRole'
           type: array
+        allBucketsAccess:
+          $ref: '#/components/schemas/bucketRoleTypes'
       required:
-      - access
       - password
       - username
       type: object
@@ -1844,58 +2446,6 @@ components:
       - ap-south-1
       - ca-central-1
       type: string
-    clusterStatus:
-      description: |
-        * `draft` - indicates that all fields under database model are mutable.
-        * `needs_deploy` - indicates that the new configuration changes have not been applied to the cluster
-        * `job_scheduled` - indicates that the new configuration changes have been scheduled to be applied.
-        * `deploying` - indicates that database is currently being deployed/new configurations being applied.
-        * `deploy_failed` - indicates that the last deployment failed.
-        * `deploy_succeeded` - indicates that the last deployment succeeded.
-        * `ready` - indicates that the database is ready.
-        * `destroying` - indicates that the database is being destroyed.
-        * `destroy_failed` - indicates that the database destroy job failed.
-        * `destroy_succeeded` - indicates that the database destroy job succeeded.
-        * `metrics_failed` - indicates that the database is not serving metrics.
-        * `preflight_started` - indicates a preflight check has started on the database
-        * `preflight_failed` - indicates a preflight check has failed on the database
-        * `preflight_succeeded` - indicates a preflight check has succeeded on the database
-        * `management_blocked` - indicates the IAM credentiald for the cloud hosting the databse have been deleted.
-        * `upgrading` - indicates the database is being upgrading.
-      enum:
-      - draft
-      - needs_deploy
-      - job_scheduled
-      - deploying
-      - deploy_failed
-      - deploy_succeeded
-      - ready
-      - destroying
-      - destroy_failed
-      - destroy_succeeded
-      - metrics_failed
-      - preflight_started
-      - preflight_failed
-      - preflight_succeeded
-      - management_blocked
-      - upgrading
-      type: string
-    clusterHealth:
-      description: |
-        * `healthy` - denotes that the resource is in a healthy state.
-        * `unhealthy` - denotes that the resource is in an uhealthy state.
-        * `degraded` - is reported for the overall health of a cluster or overall health for all nodes if all unhealthy nodes in the cluster are failed over.
-        * `failedOver` - enotes that a couchbase server node failed over to a new pod. This status is attached only to a node.
-        * `inactiveFailed` - is the value of the cluster membership as reported for a couchbase server node when it is in failed over state.
-        * `N/A` - is the value of the cluster membership if we are unable to determine the health of the cluster
-      enum:
-      - healthy
-      - unhealthy
-      - degraded
-      - failedOver
-      - inactiveFailed
-      - N/A
-      type: string
     couchbaseServices:
       enum:
       - data
@@ -1922,6 +2472,16 @@ components:
       - GMT
       - IST
       - PT
+      type: string
+    clusterVersions:
+      description: |
+        If not defined the latest version of Couchbase Server is deployed.
+        * `latest` - the a static version representing a deployment of the most recent dataplane components
+      enum:
+      - latest
+      - enterprise-6.5.0
+      - enterprise-6.5.1
+      - enterprise-6.6.0
       type: string
     awsInstances:
       enum:
@@ -1985,12 +2545,68 @@ components:
       - P15
       - P20
       - P30
+      - P40
+      - P50
+      - P60
+      - P70
+      type: string
+    clusterStatus:
+      description: |
+        * `draft` - indicates that all fields under database model are mutable.
+        * `needs_deploy` - indicates that the new configuration changes have not been applied to the cluster
+        * `job_scheduled` - indicates that the new configuration changes have been scheduled to be applied.
+        * `deploying` - indicates that database is currently being deployed/new configurations being applied.
+        * `deploy_failed` - indicates that the last deployment failed.
+        * `deploy_succeeded` - indicates that the last deployment succeeded.
+        * `ready` - indicates that the database is ready.
+        * `destroying` - indicates that the database is being destroyed.
+        * `destroy_failed` - indicates that the database destroy job failed.
+        * `destroy_succeeded` - indicates that the database destroy job succeeded.
+        * `metrics_failed` - indicates that the database is not serving metrics.
+        * `preflight_started` - indicates a preflight check has started on the database
+        * `preflight_failed` - indicates a preflight check has failed on the database
+        * `preflight_succeeded` - indicates a preflight check has succeeded on the database
+        * `management_blocked` - indicates the IAM credentiald for the cloud hosting the databse have been deleted.
+        * `upgrading` - indicates the database is being upgrading.
+      enum:
+      - draft
+      - needs_deploy
+      - job_scheduled
+      - deploying
+      - deploy_failed
+      - deploy_succeeded
+      - ready
+      - destroying
+      - destroy_failed
+      - destroy_succeeded
+      - metrics_failed
+      - preflight_started
+      - preflight_failed
+      - preflight_succeeded
+      - management_blocked
+      - upgrading
       type: string
     conflictResolution:
       default: seqno
       enum:
       - lww
       - seqno
+      type: string
+    clusterHealth:
+      description: |
+        * `healthy` - denotes that the resource is in a healthy state.
+        * `unhealthy` - denotes that the resource is in an uhealthy state.
+        * `degraded` - is reported for the overall health of a cluster or overall health for all nodes if all unhealthy nodes in the cluster are failed over.
+        * `failedOver` - enotes that a couchbase server node failed over to a new pod. This status is attached only to a node.
+        * `inactiveFailed` - is the value of the cluster membership as reported for a couchbase server node when it is in failed over state.
+        * `N/A` - is the value of the cluster membership if we are unable to determine the health of the cluster
+      enum:
+      - healthy
+      - unhealthy
+      - degraded
+      - failedOver
+      - inactiveFailed
+      - N/A
       type: string
     allowListRules:
       enum:
@@ -2026,13 +2642,13 @@ components:
       type: object
     Server_aws:
       example:
-        ebsSizeGib: 9876
+        ebsSizeGib: 9895
       properties:
         instanceSize:
           $ref: '#/components/schemas/awsInstances'
         ebsSizeGib:
           maximum: 16384
-          minimum: 4
+          minimum: 50
           type: integer
       required:
       - ebsSizeGib

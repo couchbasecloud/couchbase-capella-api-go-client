@@ -21,8 +21,7 @@ type CreateClusterRequest struct {
 	ProjectId string `json:"projectId"`
 	Servers *[]Server `json:"servers,omitempty"`
 	SupportPackage *CreateClusterRequestSupportPackage `json:"supportPackage,omitempty"`
-	// If not defined the latest version of Couchbase Server is deployed. 
-	Version *string `json:"version,omitempty"`
+	Version *ClusterVersions `json:"version,omitempty"`
 }
 
 // NewCreateClusterRequest instantiates a new CreateClusterRequest object
@@ -182,9 +181,9 @@ func (o *CreateClusterRequest) SetSupportPackage(v CreateClusterRequestSupportPa
 }
 
 // GetVersion returns the Version field value if set, zero value otherwise.
-func (o *CreateClusterRequest) GetVersion() string {
+func (o *CreateClusterRequest) GetVersion() ClusterVersions {
 	if o == nil || o.Version == nil {
-		var ret string
+		var ret ClusterVersions
 		return ret
 	}
 	return *o.Version
@@ -192,7 +191,7 @@ func (o *CreateClusterRequest) GetVersion() string {
 
 // GetVersionOk returns a tuple with the Version field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CreateClusterRequest) GetVersionOk() (*string, bool) {
+func (o *CreateClusterRequest) GetVersionOk() (*ClusterVersions, bool) {
 	if o == nil || o.Version == nil {
 		return nil, false
 	}
@@ -208,8 +207,8 @@ func (o *CreateClusterRequest) HasVersion() bool {
 	return false
 }
 
-// SetVersion gets a reference to the given string and assigns it to the Version field.
-func (o *CreateClusterRequest) SetVersion(v string) {
+// SetVersion gets a reference to the given ClusterVersions and assigns it to the Version field.
+func (o *CreateClusterRequest) SetVersion(v ClusterVersions) {
 	o.Version = &v
 }
 

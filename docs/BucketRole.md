@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | **string** | Bucket Name | 
-**Roles** | [**[]BucketRoleTypes**](BucketRoleTypes.md) |  | 
+**BucketName** | **string** | Bucket Name | 
+**BucketAccess** | [**[]BucketRoleTypes**](BucketRoleTypes.md) |  | 
 
 ## Methods
 
 ### NewBucketRole
 
-`func NewBucketRole(name string, roles []BucketRoleTypes, ) *BucketRole`
+`func NewBucketRole(bucketName string, bucketAccess []BucketRoleTypes, ) *BucketRole`
 
 NewBucketRole instantiates a new BucketRole object
 This constructor will assign default values to properties that have it defined,
@@ -26,44 +26,44 @@ NewBucketRoleWithDefaults instantiates a new BucketRole object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetName
+### GetBucketName
 
-`func (o *BucketRole) GetName() string`
+`func (o *BucketRole) GetBucketName() string`
 
-GetName returns the Name field if non-nil, zero value otherwise.
+GetBucketName returns the BucketName field if non-nil, zero value otherwise.
 
-### GetNameOk
+### GetBucketNameOk
 
-`func (o *BucketRole) GetNameOk() (*string, bool)`
+`func (o *BucketRole) GetBucketNameOk() (*string, bool)`
 
-GetNameOk returns a tuple with the Name field if it's non-nil, zero value otherwise
+GetBucketNameOk returns a tuple with the BucketName field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetName
+### SetBucketName
 
-`func (o *BucketRole) SetName(v string)`
+`func (o *BucketRole) SetBucketName(v string)`
 
-SetName sets Name field to given value.
+SetBucketName sets BucketName field to given value.
 
 
-### GetRoles
+### GetBucketAccess
 
-`func (o *BucketRole) GetRoles() []BucketRoleTypes`
+`func (o *BucketRole) GetBucketAccess() []BucketRoleTypes`
 
-GetRoles returns the Roles field if non-nil, zero value otherwise.
+GetBucketAccess returns the BucketAccess field if non-nil, zero value otherwise.
 
-### GetRolesOk
+### GetBucketAccessOk
 
-`func (o *BucketRole) GetRolesOk() (*[]BucketRoleTypes, bool)`
+`func (o *BucketRole) GetBucketAccessOk() (*[]BucketRoleTypes, bool)`
 
-GetRolesOk returns a tuple with the Roles field if it's non-nil, zero value otherwise
+GetBucketAccessOk returns a tuple with the BucketAccess field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetRoles
+### SetBucketAccess
 
-`func (o *BucketRole) SetRoles(v []BucketRoleTypes)`
+`func (o *BucketRole) SetBucketAccess(v []BucketRoleTypes)`
 
-SetRoles sets Roles field to given value.
+SetBucketAccess sets BucketAccess field to given value.
 
 
 

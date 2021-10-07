@@ -12,6 +12,7 @@ package couchbasecloud
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // Cluster struct for Cluster
@@ -22,13 +23,23 @@ type Cluster struct {
 	CloudId string `json:"cloudId"`
 	ProjectId string `json:"projectId"`
 	Status ClusterStatus `json:"status"`
+	// Resource identifier name linked with the Cloud Provider 
+	ResourceIdentifier string `json:"resourceIdentifier"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	DeployedAt *time.Time `json:"deployedAt,omitempty"`
+	Version *ClusterVersion `json:"version,omitempty"`
+	EndpointsURL *[]string `json:"endpointsURL,omitempty"`
+	PrivateEndpointURL *[]string `json:"privateEndpointURL,omitempty"`
+	EndpointsSrv *string `json:"endpointsSrv,omitempty"`
+	PrivateEndpointsSrv *string `json:"privateEndpointsSrv,omitempty"`
 }
 
 // NewCluster instantiates a new Cluster object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCluster(id string, name string, tenantId string, cloudId string, projectId string, status ClusterStatus) *Cluster {
+func NewCluster(id string, name string, tenantId string, cloudId string, projectId string, status ClusterStatus, resourceIdentifier string) *Cluster {
 	this := Cluster{}
 	this.Id = id
 	this.Name = name
@@ -36,6 +47,7 @@ func NewCluster(id string, name string, tenantId string, cloudId string, project
 	this.CloudId = cloudId
 	this.ProjectId = projectId
 	this.Status = status
+	this.ResourceIdentifier = resourceIdentifier
 	return &this
 }
 
@@ -191,6 +203,286 @@ func (o *Cluster) SetStatus(v ClusterStatus) {
 	o.Status = v
 }
 
+// GetResourceIdentifier returns the ResourceIdentifier field value
+func (o *Cluster) GetResourceIdentifier() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ResourceIdentifier
+}
+
+// GetResourceIdentifierOk returns a tuple with the ResourceIdentifier field value
+// and a boolean to check if the value has been set.
+func (o *Cluster) GetResourceIdentifierOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.ResourceIdentifier, true
+}
+
+// SetResourceIdentifier sets field value
+func (o *Cluster) SetResourceIdentifier(v string) {
+	o.ResourceIdentifier = v
+}
+
+// GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
+func (o *Cluster) GetCreatedAt() time.Time {
+	if o == nil || o.CreatedAt == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.CreatedAt
+}
+
+// GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Cluster) GetCreatedAtOk() (*time.Time, bool) {
+	if o == nil || o.CreatedAt == nil {
+		return nil, false
+	}
+	return o.CreatedAt, true
+}
+
+// HasCreatedAt returns a boolean if a field has been set.
+func (o *Cluster) HasCreatedAt() bool {
+	if o != nil && o.CreatedAt != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *Cluster) SetCreatedAt(v time.Time) {
+	o.CreatedAt = &v
+}
+
+// GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
+func (o *Cluster) GetUpdatedAt() time.Time {
+	if o == nil || o.UpdatedAt == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.UpdatedAt
+}
+
+// GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Cluster) GetUpdatedAtOk() (*time.Time, bool) {
+	if o == nil || o.UpdatedAt == nil {
+		return nil, false
+	}
+	return o.UpdatedAt, true
+}
+
+// HasUpdatedAt returns a boolean if a field has been set.
+func (o *Cluster) HasUpdatedAt() bool {
+	if o != nil && o.UpdatedAt != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
+func (o *Cluster) SetUpdatedAt(v time.Time) {
+	o.UpdatedAt = &v
+}
+
+// GetDeployedAt returns the DeployedAt field value if set, zero value otherwise.
+func (o *Cluster) GetDeployedAt() time.Time {
+	if o == nil || o.DeployedAt == nil {
+		var ret time.Time
+		return ret
+	}
+	return *o.DeployedAt
+}
+
+// GetDeployedAtOk returns a tuple with the DeployedAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Cluster) GetDeployedAtOk() (*time.Time, bool) {
+	if o == nil || o.DeployedAt == nil {
+		return nil, false
+	}
+	return o.DeployedAt, true
+}
+
+// HasDeployedAt returns a boolean if a field has been set.
+func (o *Cluster) HasDeployedAt() bool {
+	if o != nil && o.DeployedAt != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetDeployedAt gets a reference to the given time.Time and assigns it to the DeployedAt field.
+func (o *Cluster) SetDeployedAt(v time.Time) {
+	o.DeployedAt = &v
+}
+
+// GetVersion returns the Version field value if set, zero value otherwise.
+func (o *Cluster) GetVersion() ClusterVersion {
+	if o == nil || o.Version == nil {
+		var ret ClusterVersion
+		return ret
+	}
+	return *o.Version
+}
+
+// GetVersionOk returns a tuple with the Version field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Cluster) GetVersionOk() (*ClusterVersion, bool) {
+	if o == nil || o.Version == nil {
+		return nil, false
+	}
+	return o.Version, true
+}
+
+// HasVersion returns a boolean if a field has been set.
+func (o *Cluster) HasVersion() bool {
+	if o != nil && o.Version != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetVersion gets a reference to the given ClusterVersion and assigns it to the Version field.
+func (o *Cluster) SetVersion(v ClusterVersion) {
+	o.Version = &v
+}
+
+// GetEndpointsURL returns the EndpointsURL field value if set, zero value otherwise.
+func (o *Cluster) GetEndpointsURL() []string {
+	if o == nil || o.EndpointsURL == nil {
+		var ret []string
+		return ret
+	}
+	return *o.EndpointsURL
+}
+
+// GetEndpointsURLOk returns a tuple with the EndpointsURL field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Cluster) GetEndpointsURLOk() (*[]string, bool) {
+	if o == nil || o.EndpointsURL == nil {
+		return nil, false
+	}
+	return o.EndpointsURL, true
+}
+
+// HasEndpointsURL returns a boolean if a field has been set.
+func (o *Cluster) HasEndpointsURL() bool {
+	if o != nil && o.EndpointsURL != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetEndpointsURL gets a reference to the given []string and assigns it to the EndpointsURL field.
+func (o *Cluster) SetEndpointsURL(v []string) {
+	o.EndpointsURL = &v
+}
+
+// GetPrivateEndpointURL returns the PrivateEndpointURL field value if set, zero value otherwise.
+func (o *Cluster) GetPrivateEndpointURL() []string {
+	if o == nil || o.PrivateEndpointURL == nil {
+		var ret []string
+		return ret
+	}
+	return *o.PrivateEndpointURL
+}
+
+// GetPrivateEndpointURLOk returns a tuple with the PrivateEndpointURL field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Cluster) GetPrivateEndpointURLOk() (*[]string, bool) {
+	if o == nil || o.PrivateEndpointURL == nil {
+		return nil, false
+	}
+	return o.PrivateEndpointURL, true
+}
+
+// HasPrivateEndpointURL returns a boolean if a field has been set.
+func (o *Cluster) HasPrivateEndpointURL() bool {
+	if o != nil && o.PrivateEndpointURL != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetPrivateEndpointURL gets a reference to the given []string and assigns it to the PrivateEndpointURL field.
+func (o *Cluster) SetPrivateEndpointURL(v []string) {
+	o.PrivateEndpointURL = &v
+}
+
+// GetEndpointsSrv returns the EndpointsSrv field value if set, zero value otherwise.
+func (o *Cluster) GetEndpointsSrv() string {
+	if o == nil || o.EndpointsSrv == nil {
+		var ret string
+		return ret
+	}
+	return *o.EndpointsSrv
+}
+
+// GetEndpointsSrvOk returns a tuple with the EndpointsSrv field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Cluster) GetEndpointsSrvOk() (*string, bool) {
+	if o == nil || o.EndpointsSrv == nil {
+		return nil, false
+	}
+	return o.EndpointsSrv, true
+}
+
+// HasEndpointsSrv returns a boolean if a field has been set.
+func (o *Cluster) HasEndpointsSrv() bool {
+	if o != nil && o.EndpointsSrv != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetEndpointsSrv gets a reference to the given string and assigns it to the EndpointsSrv field.
+func (o *Cluster) SetEndpointsSrv(v string) {
+	o.EndpointsSrv = &v
+}
+
+// GetPrivateEndpointsSrv returns the PrivateEndpointsSrv field value if set, zero value otherwise.
+func (o *Cluster) GetPrivateEndpointsSrv() string {
+	if o == nil || o.PrivateEndpointsSrv == nil {
+		var ret string
+		return ret
+	}
+	return *o.PrivateEndpointsSrv
+}
+
+// GetPrivateEndpointsSrvOk returns a tuple with the PrivateEndpointsSrv field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Cluster) GetPrivateEndpointsSrvOk() (*string, bool) {
+	if o == nil || o.PrivateEndpointsSrv == nil {
+		return nil, false
+	}
+	return o.PrivateEndpointsSrv, true
+}
+
+// HasPrivateEndpointsSrv returns a boolean if a field has been set.
+func (o *Cluster) HasPrivateEndpointsSrv() bool {
+	if o != nil && o.PrivateEndpointsSrv != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetPrivateEndpointsSrv gets a reference to the given string and assigns it to the PrivateEndpointsSrv field.
+func (o *Cluster) SetPrivateEndpointsSrv(v string) {
+	o.PrivateEndpointsSrv = &v
+}
+
 func (o Cluster) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
@@ -210,6 +502,33 @@ func (o Cluster) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["status"] = o.Status
+	}
+	if true {
+		toSerialize["resourceIdentifier"] = o.ResourceIdentifier
+	}
+	if o.CreatedAt != nil {
+		toSerialize["createdAt"] = o.CreatedAt
+	}
+	if o.UpdatedAt != nil {
+		toSerialize["updatedAt"] = o.UpdatedAt
+	}
+	if o.DeployedAt != nil {
+		toSerialize["deployedAt"] = o.DeployedAt
+	}
+	if o.Version != nil {
+		toSerialize["version"] = o.Version
+	}
+	if o.EndpointsURL != nil {
+		toSerialize["endpointsURL"] = o.EndpointsURL
+	}
+	if o.PrivateEndpointURL != nil {
+		toSerialize["privateEndpointURL"] = o.PrivateEndpointURL
+	}
+	if o.EndpointsSrv != nil {
+		toSerialize["endpointsSrv"] = o.EndpointsSrv
+	}
+	if o.PrivateEndpointsSrv != nil {
+		toSerialize["privateEndpointsSrv"] = o.PrivateEndpointsSrv
 	}
 	return json.Marshal(toSerialize)
 }

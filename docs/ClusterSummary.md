@@ -9,8 +9,6 @@ Name | Type | Description | Notes
 **TenantId** | **string** |  | 
 **CloudId** | **string** |  | 
 **ProjectId** | **string** |  | 
-**Status** | [**ClusterStatus**](ClusterStatus.md) |  | 
-**Health** | [**ClusterHealth**](ClusterHealth.md) |  | 
 **Services** | [**[]CouchbaseServices**](CouchbaseServices.md) |  | 
 **Nodes** | **int32** |  | 
 
@@ -18,7 +16,7 @@ Name | Type | Description | Notes
 
 ### NewClusterSummary
 
-`func NewClusterSummary(id string, name string, tenantId string, cloudId string, projectId string, status ClusterStatus, health ClusterHealth, services []CouchbaseServices, nodes int32, ) *ClusterSummary`
+`func NewClusterSummary(id string, name string, tenantId string, cloudId string, projectId string, services []CouchbaseServices, nodes int32, ) *ClusterSummary`
 
 NewClusterSummary instantiates a new ClusterSummary object
 This constructor will assign default values to properties that have it defined,
@@ -131,46 +129,6 @@ and a boolean to check if the value has been set.
 `func (o *ClusterSummary) SetProjectId(v string)`
 
 SetProjectId sets ProjectId field to given value.
-
-
-### GetStatus
-
-`func (o *ClusterSummary) GetStatus() ClusterStatus`
-
-GetStatus returns the Status field if non-nil, zero value otherwise.
-
-### GetStatusOk
-
-`func (o *ClusterSummary) GetStatusOk() (*ClusterStatus, bool)`
-
-GetStatusOk returns a tuple with the Status field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetStatus
-
-`func (o *ClusterSummary) SetStatus(v ClusterStatus)`
-
-SetStatus sets Status field to given value.
-
-
-### GetHealth
-
-`func (o *ClusterSummary) GetHealth() ClusterHealth`
-
-GetHealth returns the Health field if non-nil, zero value otherwise.
-
-### GetHealthOk
-
-`func (o *ClusterSummary) GetHealthOk() (*ClusterHealth, bool)`
-
-GetHealthOk returns a tuple with the Health field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetHealth
-
-`func (o *ClusterSummary) SetHealth(v ClusterHealth)`
-
-SetHealth sets Health field to given value.
 
 
 ### GetServices
