@@ -681,6 +681,30 @@ paths:
               schema:
                 $ref: '#/components/schemas/ListBucketsResponse'
           description: Cluster's bucket list
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
       summary: List cluster buckets
       tags:
       - clusters
@@ -710,6 +734,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/CouchbaseBucketSpec'
           description: Successfully created bucket
+          headers:
+            Location:
+              description: |
+                reference to the created bucket
+              explode: false
+              schema:
+                type: string
+              style: simple
         "403":
           content:
             application/json:
@@ -788,6 +820,118 @@ paths:
                 $ref: '#/components/schemas/goof'
           description: Internal server error
       summary: Update bucket in cluster
+      tags:
+      - clusters
+  /v2/clusters/{id}/buckets/{bucketId}:
+    delete:
+      description: Deletes a single bucket from the cluster
+      operationId: clusters/delete-single-bucket
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Bucket ID
+        example: Y291Y2hiYXNlY2xvdWRidWNrZXQ=
+        explode: false
+        in: path
+        name: bucketId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "202":
+          description: Success
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Delete an existing bucket
+      tags:
+      - clusters
+    put:
+      description: Updates the configuration of an existing bucket in a cluster
+      operationId: clusters/update-single-bucket
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: Bucket ID
+        example: Y291Y2hiYXNlY2xvdWRidWNrZXQ=
+        explode: false
+        in: path
+        name: bucketId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBucketRequest'
+      responses:
+        "202":
+          description: Success
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Update an existing bucket
       tags:
       - clusters
   /v2/clusters/{id}/health:
@@ -1313,6 +1457,453 @@ paths:
       summary: Create Database User
       tags:
       - clusters
+  /v3/clusters:
+    get:
+      description: Returns a paginated list of all clusters
+      operationId: clusters/v3list
+      parameters:
+      - description: Sets how many results you would like to have on each page
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Sets what page you would like to view
+        explode: true
+        in: query
+        name: perPage
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Cloud ID for filtering cloud clusters.
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: true
+        in: query
+        name: cloudId
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: form
+      - description: Project ID for filtering project clusters.
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: true
+        in: query
+        name: projectId
+        required: false
+        schema:
+          format: uuid
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3ClusterList'
+          description: Success
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: List all clusters v3
+      tags:
+      - clusters v3
+    post:
+      description: Creates a cluster with the given specifications and returns the
+        id of the cluster on success
+      operationId: clusters/v3create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3CreateClusterRequest'
+      responses:
+        "202":
+          description: Success
+          headers:
+            Location:
+              description: |
+                Reference to the created cluster
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Create Cluster V3
+      tags:
+      - clusters v3
+  /v3/clusters/{id}:
+    delete:
+      description: Starts the deletion process for the cluster
+      operationId: clusters/v3delete
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "202":
+          description: Successfully started the cluster deletion process
+          headers:
+            Location:
+              description: |
+                Reference to the cluster to be deleted
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Delete Cluster V3
+      tags:
+      - clusters v3
+    get:
+      description: Retrieves cluster information using the provided cluster ID
+      operationId: clusters/v3show
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3Cluster'
+          description: |
+            If found, returns the cluster information
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Get Cluster Info V3
+      tags:
+      - clusters v3
+  /v3/clusters/{id}/status:
+    get:
+      description: Gets cluster status
+      operationId: clusters/v3status
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3ClusterStatusResponse'
+          description: |
+            Cluster status
+      summary: Get Cluster Status V3
+      tags:
+      - clusters v3
+  /v3/clusters/{id}/meta:
+    put:
+      description: Updates the cluster metadata
+      operationId: clusters/v3update-meta
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3UpdateClusterMetaRequest'
+      responses:
+        "204":
+          description: Successfully updated the cluster metadata
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Update Cluster Metadata V3
+      tags:
+      - clusters v3
+  /v3/clusters/{id}/servers:
+    put:
+      description: Updates the cluster server group to scale in / out, up / down
+      operationId: clusters/v3update-servers
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3UpdateClusterServersRequest'
+      responses:
+        "202":
+          description: Success
+          headers:
+            Location:
+              description: |
+                Reference to the updated cluster
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Update Cluster Servers V3
+      tags:
+      - clusters v3
+  /v3/clusters/{id}/support:
+    put:
+      description: Updates the cluster support package details
+      operationId: clusters/v3update-support
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3UpdateClusterSupportRequest'
+      responses:
+        "204":
+          description: Successfully updated the support package details
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Update Cluster Support Package V3
+      tags:
+      - clusters v3
+  /v3/clusters/{id}/users:
+    post:
+      description: Creates a new user for a cluster with access to buckets/scopes
+      operationId: clusters/v3create-user
+      parameters:
+      - description: Cluster ID
+        example: 83143c02-a1b6-4bdf-ba4e-7a85aab633e6
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3CreateClusterUserRequest'
+      responses:
+        "201":
+          description: Successfully created cluster user
+          headers:
+            Location:
+              description: Reference to the created cluster user
+              explode: false
+              schema:
+                type: string
+              style: simple
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Access forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Resource was not found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Request validation error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/goof'
+          description: Internal server error
+      summary: Create cluster user
+      tags:
+      - clusters v3
 components:
   schemas:
     StatusOK:
@@ -1959,9 +2550,12 @@ components:
       example:
         replicas: 6
         name: name
+        id: id
         memoryQuota: 0
         status: status
       properties:
+        id:
+          type: string
         name:
           maximum: 100
           minimum: 1
@@ -1976,6 +2570,7 @@ components:
           type: string
       required:
       - conflictResolution
+      - id
       - memoryQuota
       - name
       - replicas
@@ -2018,6 +2613,16 @@ components:
           type: string
       required:
       - name
+      type: object
+    UpdateBucketRequest:
+      example:
+        memoryQuota: 100
+      properties:
+        memoryQuota:
+          minimum: 100
+          type: integer
+      required:
+      - memoryQuota
       type: object
     ClusterHealthResponse:
       example:
@@ -2370,6 +2975,362 @@ components:
       - password
       - username
       type: object
+    V3ClusterList:
+      example:
+        cursor:
+          pages:
+            next: 6
+            totalItems: 2
+            perPage: 5
+            previous: 1
+            last: 5
+            page: 0
+          hrefs:
+            next: https://openapi-generator.tech
+            last: https://openapi-generator.tech
+            previous: https://openapi-generator.tech
+            first: https://openapi-generator.tech
+        data:
+          tenantId: tenantId
+          items:
+          - environment: environment
+            cloudId: cloudId
+            name: name
+            id: id
+            projectId: projectId
+          - environment: environment
+            cloudId: cloudId
+            name: name
+            id: id
+            projectId: projectId
+      properties:
+        cursor:
+          $ref: '#/components/schemas/cursor'
+        data:
+          $ref: '#/components/schemas/V3ClusterList_data'
+      required:
+      - cursor
+      - data
+      type: object
+    V3CreateClusterRequest:
+      example:
+        environment: hosted
+        servers:
+        - compute: m5.xlarge
+          size: 4
+          services:
+          - data
+          - index
+          storage:
+            size: 50
+            IOPS: 3000
+            type: GP3
+        - compute: m5.xlarge
+          size: 4
+          services:
+          - data
+          - index
+          storage:
+            size: 50
+            IOPS: 3000
+            type: GP3
+        supportPackage:
+          timezone: IST
+          type: DeveloperPro
+        clusterName: Demo G2 Cluster
+        description: Example description of a G2 cluster
+        place:
+          singleAZ: true
+          hosted:
+            provider: aws
+            CIDR: 10.21.0.0/16
+            region: us-west-2
+        projectId: 99d9487a-235b-4b5f-b610-577a60edb911
+      properties:
+        environment:
+          $ref: '#/components/schemas/v3Environment'
+        clusterName:
+          description: Name of the cluster
+          example: Demo G2 Cluster
+          maxLength: 128
+          minLength: 2
+          type: string
+        projectId:
+          description: Uniquely identifiable projectId
+          example: 99d9487a-235b-4b5f-b610-577a60edb911
+          format: uuid
+          type: string
+        description:
+          description: A short description that describes the cluster
+          example: Example description of a G2 cluster
+          type: string
+        place:
+          $ref: '#/components/schemas/V3Place'
+        servers:
+          description: Server specifications for creating the cluster
+          items:
+            $ref: '#/components/schemas/V3Servers'
+          type: array
+        supportPackage:
+          $ref: '#/components/schemas/V3SupportPackage'
+      required:
+      - clusterName
+      - environment
+      - place
+      - projectId
+      - servers
+      - supportPackage
+      type: object
+    V3Place:
+      description: Cluster deployment location based on the value provided in environment
+      example:
+        singleAZ: true
+        hosted:
+          provider: aws
+          CIDR: 10.21.0.0/16
+          region: us-west-2
+      properties:
+        singleAZ:
+          description: Has to be true if the supportPackage.type is equal to "Basic"
+          example: true
+          type: boolean
+        hosted:
+          $ref: '#/components/schemas/V3Place_hosted'
+      required:
+      - singleAZ
+      type: object
+    V3Servers:
+      example:
+        compute: m5.xlarge
+        size: 4
+        services:
+        - data
+        - index
+        storage:
+          size: 50
+          IOPS: 3000
+          type: GP3
+      properties:
+        size:
+          description: How many nodes, value >= 3, <= 27. Total nodes in the cluster
+            <= 27
+          example: 4
+          maximum: 27
+          minimum: 3
+          type: integer
+        compute:
+          description: Compute instance type
+          example: m5.xlarge
+          type: string
+        services:
+          description: Array of couchbase services to be installed on the nodes
+          example:
+          - data
+          - index
+          items:
+            $ref: '#/components/schemas/v3CouchbaseServices'
+          type: array
+        storage:
+          $ref: '#/components/schemas/V3Servers_storage'
+      required:
+      - compute
+      - services
+      - size
+      - storage
+      type: object
+    V3SupportPackage:
+      description: |
+        One from "Basic", "DeveloperPro" or "Enterprise"
+      example:
+        timezone: IST
+        type: DeveloperPro
+      properties:
+        timezone:
+          $ref: '#/components/schemas/v3SupportPackageTimezones'
+        type:
+          $ref: '#/components/schemas/v3SupportPackageType'
+      required:
+      - timezone
+      - type
+      type: object
+    V3Cluster:
+      example:
+        endpointsSrv: endpointsSrv
+        availabilityZones:
+        - availabilityZones
+        - availabilityZones
+        version:
+          components:
+            cbServerVersion: cbServerVersion
+          name: name
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        environment: environment
+        servers:
+        - compute: compute
+          size: 0
+          services:
+          - services
+          - services
+          storage:
+            size: 1
+            IOPS: 6
+            type: type
+        - compute: compute
+          size: 0
+          services:
+          - services
+          - services
+          storage:
+            size: 1
+            IOPS: 6
+            type: type
+        name: name
+        tenantId: tenantId
+        id: id
+        place:
+          provider: provider
+          CIDR: CIDR
+          region: region
+        projectId: projectId
+        support: support
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+        status: status
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        tenantId:
+          type: string
+        projectId:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        status:
+          type: string
+        version:
+          $ref: '#/components/schemas/V3Cluster_version'
+        endpointsSrv:
+          type: string
+        environment:
+          type: string
+        place:
+          $ref: '#/components/schemas/V3Cluster_place'
+        servers:
+          items:
+            $ref: '#/components/schemas/V3Cluster_servers'
+          type: array
+        availabilityZones:
+          items:
+            type: string
+          type: array
+        support:
+          type: string
+      required:
+      - availabilityZones
+      - createdAt
+      - environment
+      - id
+      - name
+      - place
+      - projectId
+      - servers
+      - status
+      - support
+      - tenantId
+      - updatedAt
+      - version
+      type: object
+    V3ClusterStatusResponse:
+      example:
+        status: deploying
+      properties:
+        status:
+          $ref: '#/components/schemas/v3ClusterStatus'
+      required:
+      - status
+      type: object
+    V3UpdateClusterMetaRequest:
+      example:
+        name: name
+        description: description
+      minProperties: 1
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      type: object
+    V3UpdateClusterServersRequest:
+      example:
+        servers:
+        - compute: m5.xlarge
+          size: 4
+          services:
+          - data
+          - index
+          storage:
+            size: 50
+            IOPS: 3000
+            type: GP3
+        - compute: m5.xlarge
+          size: 4
+          services:
+          - data
+          - index
+          storage:
+            size: 50
+            IOPS: 3000
+            type: GP3
+      properties:
+        servers:
+          items:
+            $ref: '#/components/schemas/V3Servers'
+          type: array
+      required:
+      - servers
+      type: object
+    V3UpdateClusterSupportRequest:
+      example:
+        supportPackage:
+          timezone: IST
+          type: DeveloperPro
+      properties:
+        supportPackage:
+          $ref: '#/components/schemas/V3UpdateClusterSupportRequest_supportPackage'
+      required:
+      - supportPackage
+      type: object
+    V3CreateClusterUserRequest:
+      example:
+        password: Password123!
+        buckets:
+        - scope: _default
+          name: bucket1
+        - scope: _default
+          name: bucket1
+        username: user1
+      properties:
+        username:
+          example: user1
+          type: string
+        password:
+          example: Password123!
+          type: string
+        allBucketsAccess:
+          $ref: '#/components/schemas/v3BucketRoles'
+        buckets:
+          items:
+            $ref: '#/components/schemas/V3CreateClusterUserRequest_buckets'
+          type: array
+      required:
+      - password
+      - username
+      type: object
     cursor:
       example:
         pages:
@@ -2627,6 +3588,70 @@ components:
       - data_writer
       - data_reader
       type: string
+    v3Environment:
+      enum:
+      - hosted
+      - vpc
+      example: hosted
+      type: string
+    v3Provider:
+      enum:
+      - aws
+      - azure
+      - gcp
+      example: aws
+      type: string
+    v3CouchbaseServices:
+      enum:
+      - data
+      - index
+      - query
+      - search
+      - eventing
+      - analytics
+      type: string
+    v3StorageType:
+      enum:
+      - GP3
+      - IO2
+      example: GP3
+      type: string
+    v3SupportPackageTimezones:
+      description: |
+        * `ET` - Eastern Time
+        * `GMT` - Greenwich Mean Time
+        * `IST` - India Standard Time
+        * `PT` - Pacific Time
+      enum:
+      - ET
+      - GMT
+      - IST
+      - PT
+      example: IST
+      type: string
+    v3SupportPackageType:
+      enum:
+      - Basic
+      - DeveloperPro
+      - Enterprise
+      example: DeveloperPro
+      type: string
+    v3ClusterStatus:
+      enum:
+      - draft
+      - deploying
+      - destroying
+      - healthy
+      - degraded
+      example: deploying
+      type: string
+    v3BucketRoles:
+      description: |
+        * `data_writer` - Gives the user permission to read and write data for the bucket. * `data_reader` - Gives the user read-only permission for the bucket.
+      enum:
+      - data_writer
+      - data_reader
+      type: string
     CreateClusterRequest_supportPackage:
       description: |
         if support package is not set then default support package is used.
@@ -2664,6 +3689,218 @@ components:
       required:
       - instanceSize
       - volumeType
+      type: object
+    V3ClusterList_data_items:
+      example:
+        environment: environment
+        cloudId: cloudId
+        name: name
+        id: id
+        projectId: projectId
+      properties:
+        environment:
+          type: string
+        cloudId:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        projectId:
+          type: string
+      required:
+      - environment
+      - id
+      - name
+      - projectId
+      type: object
+    V3ClusterList_data:
+      example:
+        tenantId: tenantId
+        items:
+        - environment: environment
+          cloudId: cloudId
+          name: name
+          id: id
+          projectId: projectId
+        - environment: environment
+          cloudId: cloudId
+          name: name
+          id: id
+          projectId: projectId
+      properties:
+        tenantId:
+          type: string
+        items:
+          items:
+            $ref: '#/components/schemas/V3ClusterList_data_items'
+          type: array
+      type: object
+    V3Place_hosted:
+      description: cluster will be deployed in the managed couchbase capella
+      example:
+        provider: aws
+        CIDR: 10.21.0.0/16
+        region: us-west-2
+      properties:
+        provider:
+          $ref: '#/components/schemas/v3Provider'
+        region:
+          description: A valid region for the cloudProvider
+          example: us-west-2
+          type: string
+        CIDR:
+          description: CIDR block.
+          example: 10.21.0.0/16
+          type: string
+      required:
+      - CIDR
+      - provider
+      - region
+      type: object
+    V3Servers_storage:
+      example:
+        size: 50
+        IOPS: 3000
+        type: GP3
+      properties:
+        type:
+          $ref: '#/components/schemas/v3StorageType'
+        IOPS:
+          description: Min 3000 for GP3, 1000 if IO2. If storageType="GP3", max =
+            16000.  If storageType= "IO2", max= 64000
+          example: 3000
+          type: integer
+        size:
+          description: Min 50Gb, max 16Tb
+          example: 50
+          maximum: 16384
+          minimum: 50
+          type: integer
+      required:
+      - IOPS
+      - size
+      - type
+      type: object
+    V3Cluster_version_components:
+      example:
+        cbServerVersion: cbServerVersion
+      properties:
+        cbServerVersion:
+          type: string
+      required:
+      - cbServerVersion
+      type: object
+    V3Cluster_version:
+      example:
+        components:
+          cbServerVersion: cbServerVersion
+        name: name
+      properties:
+        name:
+          type: string
+        components:
+          $ref: '#/components/schemas/V3Cluster_version_components'
+      required:
+      - components
+      - name
+      type: object
+    V3Cluster_place:
+      example:
+        provider: provider
+        CIDR: CIDR
+        region: region
+      properties:
+        provider:
+          type: string
+        region:
+          type: string
+        CIDR:
+          type: string
+      required:
+      - CIDR
+      - provider
+      - region
+      type: object
+    V3Cluster_storage:
+      example:
+        size: 1
+        IOPS: 6
+        type: type
+      properties:
+        type:
+          type: string
+        IOPS:
+          type: integer
+        size:
+          type: integer
+      required:
+      - IOPS
+      - size
+      - type
+      type: object
+    V3Cluster_servers:
+      example:
+        compute: compute
+        size: 0
+        services:
+        - services
+        - services
+        storage:
+          size: 1
+          IOPS: 6
+          type: type
+      properties:
+        size:
+          type: integer
+        compute:
+          description: Compute instance type
+          type: string
+        services:
+          items:
+            type: string
+          type: array
+        storage:
+          $ref: '#/components/schemas/V3Cluster_storage'
+      required:
+      - compute
+      - services
+      - size
+      - storage
+      type: object
+    V3UpdateClusterSupportRequest_supportPackage:
+      description: |
+        One from "Basic", "DeveloperPro" or "Enterprise"
+      example:
+        timezone: IST
+        type: DeveloperPro
+      properties:
+        timezone:
+          $ref: '#/components/schemas/v3SupportPackageTimezones'
+        type:
+          $ref: '#/components/schemas/v3SupportPackageType'
+      required:
+      - type
+      type: object
+    V3CreateClusterUserRequest_buckets:
+      example:
+        scope: _default
+        name: bucket1
+      properties:
+        name:
+          example: bucket1
+          type: string
+        scope:
+          description: enter '*' for getting access to all scopes within a bucket
+            or the scope name for getting access to a single scope
+          example: _default
+          type: string
+        access:
+          $ref: '#/components/schemas/v3BucketRoles'
+      required:
+      - access
+      - name
+      - scope
       type: object
     cursor_pages:
       example:
@@ -2723,3 +3960,4 @@ components:
     token:
       scheme: bearer
       type: http
+

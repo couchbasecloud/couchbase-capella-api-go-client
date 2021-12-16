@@ -4,17 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Id** | **string** |  | 
 **Name** | **string** |  | 
 **MemoryQuota** | **int32** |  | 
 **Replicas** | **int32** |  | 
-**ConflictResolution** | [**ConflictResolution**](ConflictResolution.md) |  | [default to SEQNO]
+**ConflictResolution** | [**ConflictResolution**](ConflictResolution.md) |  | [default to CONFLICTRESOLUTION_SEQNO]
 **Status** | **string** |  | 
 
 ## Methods
 
 ### NewListBucketItem
 
-`func NewListBucketItem(name string, memoryQuota int32, replicas int32, conflictResolution ConflictResolution, status string, ) *ListBucketItem`
+`func NewListBucketItem(id string, name string, memoryQuota int32, replicas int32, conflictResolution ConflictResolution, status string, ) *ListBucketItem`
 
 NewListBucketItem instantiates a new ListBucketItem object
 This constructor will assign default values to properties that have it defined,
@@ -28,6 +29,26 @@ will change when the set of required properties is changed
 NewListBucketItemWithDefaults instantiates a new ListBucketItem object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetId
+
+`func (o *ListBucketItem) GetId() string`
+
+GetId returns the Id field if non-nil, zero value otherwise.
+
+### GetIdOk
+
+`func (o *ListBucketItem) GetIdOk() (*string, bool)`
+
+GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetId
+
+`func (o *ListBucketItem) SetId(v string)`
+
+SetId sets Id field to given value.
+
 
 ### GetName
 

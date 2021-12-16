@@ -11,6 +11,7 @@ Method | HTTP request | Description
 [**ClustersDelete**](ClustersApi.md#ClustersDelete) | **Delete** /v2/clusters/{id} | Delete cluster
 [**ClustersDeleteAllowlistEntry**](ClustersApi.md#ClustersDeleteAllowlistEntry) | **Delete** /v2/clusters/{id}/allowlist | Delete entry from allowlist
 [**ClustersDeleteBucket**](ClustersApi.md#ClustersDeleteBucket) | **Delete** /v2/clusters/{id}/buckets | Delete bucket in cluster
+[**ClustersDeleteSingleBucket**](ClustersApi.md#ClustersDeleteSingleBucket) | **Delete** /v2/clusters/{id}/buckets/{bucketId} | Delete an existing bucket
 [**ClustersDeleteUser**](ClustersApi.md#ClustersDeleteUser) | **Delete** /v2/clusters/{id}/users/{username} | Delete Database User
 [**ClustersGetAllowlist**](ClustersApi.md#ClustersGetAllowlist) | **Get** /v2/clusters/{id}/allowlist | Get current allowlist
 [**ClustersGetCertificate**](ClustersApi.md#ClustersGetCertificate) | **Get** /v2/clusters/{id}/certificate | Get Cluster Certificate
@@ -22,6 +23,7 @@ Method | HTTP request | Description
 [**ClustersStatus**](ClustersApi.md#ClustersStatus) | **Get** /v2/clusters/{id}/status | Get Cluster Status
 [**ClustersUpdateAllowlist**](ClustersApi.md#ClustersUpdateAllowlist) | **Put** /v2/clusters/{id}/allowlist | Update the allowlist for a cluster
 [**ClustersUpdateBucket**](ClustersApi.md#ClustersUpdateBucket) | **Put** /v2/clusters/{id}/buckets | Update bucket in cluster
+[**ClustersUpdateSingleBucket**](ClustersApi.md#ClustersUpdateSingleBucket) | **Put** /v2/clusters/{id}/buckets/{bucketId} | Update an existing bucket
 [**ClustersUpdateUser**](ClustersApi.md#ClustersUpdateUser) | **Put** /v2/clusters/{id}/users/{username} | Update Database User
 
 
@@ -503,6 +505,77 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ClustersDeleteSingleBucket
+
+> ClustersDeleteSingleBucket(ctx, id, bucketId).Execute()
+
+Delete an existing bucket
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    id := TODO // string | Cluster ID
+    bucketId := "Y291Y2hiYXNlY2xvdWRidWNrZXQ=" // string | Bucket ID
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.ClustersApi.ClustersDeleteSingleBucket(context.Background(), id, bucketId).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `ClustersApi.ClustersDeleteSingleBucket``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | [**string**](.md) | Cluster ID | 
+**bucketId** | **string** | Bucket ID | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiClustersDeleteSingleBucketRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+
+### Return type
+
+ (empty response body)
+
+### Authorization
+
+[token](../README.md#token)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -1272,6 +1345,79 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**CouchbaseBucketSpec**](CouchbaseBucketSpec.md)
+
+### Authorization
+
+[token](../README.md#token)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ClustersUpdateSingleBucket
+
+> ClustersUpdateSingleBucket(ctx, id, bucketId).UpdateBucketRequest(updateBucketRequest).Execute()
+
+Update an existing bucket
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    id := TODO // string | Cluster ID
+    bucketId := "Y291Y2hiYXNlY2xvdWRidWNrZXQ=" // string | Bucket ID
+    updateBucketRequest := *openapiclient.NewUpdateBucketRequest(int32(123)) // UpdateBucketRequest |  (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.ClustersApi.ClustersUpdateSingleBucket(context.Background(), id, bucketId).UpdateBucketRequest(updateBucketRequest).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `ClustersApi.ClustersUpdateSingleBucket``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | [**string**](.md) | Cluster ID | 
+**bucketId** | **string** | Bucket ID | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiClustersUpdateSingleBucketRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+ **updateBucketRequest** | [**UpdateBucketRequest**](UpdateBucketRequest.md) |  | 
+
+### Return type
+
+ (empty response body)
 
 ### Authorization
 

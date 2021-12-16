@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **Name** | **string** |  | 
 **MemoryQuota** | **int32** |  | 
 **Replicas** | Pointer to **int32** |  | [optional] [default to 1]
-**ConflictResolution** | Pointer to [**ConflictResolution**](ConflictResolution.md) |  | [optional] [default to SEQNO]
+**ConflictResolution** | Pointer to [**ConflictResolution**](ConflictResolution.md) |  | [optional] [default to CONFLICTRESOLUTION_SEQNO]
 
 ## Methods
 
