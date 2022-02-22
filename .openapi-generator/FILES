@@ -107,7 +107,6 @@ docs/V3UpdateClusterMetaRequest.md
 docs/V3UpdateClusterServersRequest.md
 docs/V3UpdateClusterSupportRequest.md
 docs/V3UpdateClusterSupportRequestSupportPackage.md
-git_push.sh
 go.mod
 go.sum
 model_allow_list_entry.go
