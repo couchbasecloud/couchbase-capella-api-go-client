@@ -2,7 +2,4 @@ module github.com/couchbasecloud/couchbase-capella-api-go-client
 
 go 1.13
 
-require (
-	github.com/couchbaselabs/couchbase-cloud-go-client v1.4.0
-	golang.org/x/oauth2 v0.0.0-20210218202405-ba52d332ba99
-)
+require golang.org/x/oauth2 v0.0.0-20210218202405-ba52d332ba99

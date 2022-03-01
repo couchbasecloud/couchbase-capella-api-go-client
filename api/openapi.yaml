@@ -3370,6 +3370,7 @@ components:
       - destroy_succeeded
       - needs_cleanup
       - management_blocked
+      - upgrading
       type: string
     provider:
       enum:
@@ -3640,9 +3641,19 @@ components:
       enum:
       - draft
       - deploying
+      - scaling
+      - upgrading
+      - rebalancing
+      - peering
       - destroying
       - healthy
       - degraded
+      - deploymentFailed
+      - scaleFailed
+      - upgradeFailed
+      - rebalanceFailed
+      - peeringFailed
+      - destroyFailed
       example: deploying
       type: string
     v3BucketRoles:
