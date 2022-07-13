@@ -5,14 +5,14 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Type** | [**V3StorageType**](V3StorageType.md) |  | 
-**IOPS** | **int32** | Min 3000 for GP3, 1000 if IO2. If storageType&#x3D;\&quot;GP3\&quot;, max &#x3D; 16000.  If storageType&#x3D; \&quot;IO2\&quot;, max&#x3D; 64000 | 
-**Size** | **int32** | Min 50Gb, max 16Tb | 
+**IOPS** | Pointer to **int32** | Required for GP3 and IO2. Min 3000 for GP3, 1000 if IO2. If storageType&#x3D;\&quot;GP3\&quot;, max &#x3D; 16000. If storageType&#x3D; \&quot;IO2\&quot;, max&#x3D; 64000 | [optional] 
+**Size** | **int32** | Min 50GB, max 16TB | 
 
 ## Methods
 
 ### NewV3ServersStorage
 
-`func NewV3ServersStorage(type_ V3StorageType, iOPS int32, size int32, ) *V3ServersStorage`
+`func NewV3ServersStorage(type_ V3StorageType, size int32, ) *V3ServersStorage`
 
 NewV3ServersStorage instantiates a new V3ServersStorage object
 This constructor will assign default values to properties that have it defined,
@@ -66,6 +66,11 @@ and a boolean to check if the value has been set.
 
 SetIOPS sets IOPS field to given value.
 
+### HasIOPS
+
+`func (o *V3ServersStorage) HasIOPS() bool`
+
+HasIOPS returns a boolean if a field has been set.
 
 ### GetSize
 

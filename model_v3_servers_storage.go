@@ -17,9 +17,9 @@ import (
 // V3ServersStorage struct for V3ServersStorage
 type V3ServersStorage struct {
 	Type V3StorageType `json:"type"`
-	// Min 3000 for GP3, 1000 if IO2. If storageType=\"GP3\", max = 16000.  If storageType= \"IO2\", max= 64000
-	IOPS int32 `json:"IOPS"`
-	// Min 50Gb, max 16Tb
+	// Required for GP3 and IO2. Min 3000 for GP3, 1000 if IO2. If storageType=\"GP3\", max = 16000. If storageType= \"IO2\", max= 64000
+	IOPS *int32 `json:"IOPS,omitempty"`
+	// Min 50GB, max 16TB
 	Size int32 `json:"size"`
 }
 
@@ -27,10 +27,9 @@ type V3ServersStorage struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewV3ServersStorage(type_ V3StorageType, iOPS int32, size int32) *V3ServersStorage {
+func NewV3ServersStorage(type_ V3StorageType, size int32) *V3ServersStorage {
 	this := V3ServersStorage{}
 	this.Type = type_
-	this.IOPS = iOPS
 	this.Size = size
 	return &this
 }
@@ -67,28 +66,36 @@ func (o *V3ServersStorage) SetType(v V3StorageType) {
 	o.Type = v
 }
 
-// GetIOPS returns the IOPS field value
+// GetIOPS returns the IOPS field value if set, zero value otherwise.
 func (o *V3ServersStorage) GetIOPS() int32 {
-	if o == nil {
+	if o == nil || o.IOPS == nil {
 		var ret int32
 		return ret
 	}
-
-	return o.IOPS
+	return *o.IOPS
 }
 
-// GetIOPSOk returns a tuple with the IOPS field value
+// GetIOPSOk returns a tuple with the IOPS field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 func (o *V3ServersStorage) GetIOPSOk() (*int32, bool) {
-	if o == nil  {
+	if o == nil || o.IOPS == nil {
 		return nil, false
 	}
-	return &o.IOPS, true
+	return o.IOPS, true
 }
 
-// SetIOPS sets field value
+// HasIOPS returns a boolean if a field has been set.
+func (o *V3ServersStorage) HasIOPS() bool {
+	if o != nil && o.IOPS != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetIOPS gets a reference to the given int32 and assigns it to the IOPS field.
 func (o *V3ServersStorage) SetIOPS(v int32) {
-	o.IOPS = v
+	o.IOPS = &v
 }
 
 // GetSize returns the Size field value
@@ -120,7 +127,7 @@ func (o V3ServersStorage) MarshalJSON() ([]byte, error) {
 	if true {
 		toSerialize["type"] = o.Type
 	}
-	if true {
+	if o.IOPS != nil {
 		toSerialize["IOPS"] = o.IOPS
 	}
 	if true {
