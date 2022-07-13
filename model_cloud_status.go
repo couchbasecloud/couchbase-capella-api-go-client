@@ -34,6 +34,7 @@ const (
 	CLOUDSTATUS_DESTROY_SUCCEEDED CloudStatus = "destroy_succeeded"
 	CLOUDSTATUS_NEEDS_CLEANUP CloudStatus = "needs_cleanup"
 	CLOUDSTATUS_MANAGEMENT_BLOCKED CloudStatus = "management_blocked"
+	CLOUDSTATUS_UPGRADING CloudStatus = "upgrading"
 )
 
 var allowedCloudStatusEnumValues = []CloudStatus{
@@ -51,6 +52,7 @@ var allowedCloudStatusEnumValues = []CloudStatus{
 	"destroy_succeeded",
 	"needs_cleanup",
 	"management_blocked",
+	"upgrading",
 }
 
 func (v *CloudStatus) UnmarshalJSON(src []byte) error {

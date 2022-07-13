@@ -22,11 +22,13 @@ type V3StorageType string
 const (
 	V3STORAGETYPE_GP3 V3StorageType = "GP3"
 	V3STORAGETYPE_IO2 V3StorageType = "IO2"
+	V3STORAGETYPE_PD_SSD V3StorageType = "PD-SSD"
 )
 
 var allowedV3StorageTypeEnumValues = []V3StorageType{
 	"GP3",
 	"IO2",
+	"PD-SSD",
 }
 
 func (v *V3StorageType) UnmarshalJSON(src []byte) error {

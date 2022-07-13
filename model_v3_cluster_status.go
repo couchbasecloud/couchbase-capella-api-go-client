@@ -22,17 +22,37 @@ type V3ClusterStatus string
 const (
 	V3CLUSTERSTATUS_DRAFT V3ClusterStatus = "draft"
 	V3CLUSTERSTATUS_DEPLOYING V3ClusterStatus = "deploying"
+	V3CLUSTERSTATUS_SCALING V3ClusterStatus = "scaling"
+	V3CLUSTERSTATUS_UPGRADING V3ClusterStatus = "upgrading"
+	V3CLUSTERSTATUS_REBALANCING V3ClusterStatus = "rebalancing"
+	V3CLUSTERSTATUS_PEERING V3ClusterStatus = "peering"
 	V3CLUSTERSTATUS_DESTROYING V3ClusterStatus = "destroying"
 	V3CLUSTERSTATUS_HEALTHY V3ClusterStatus = "healthy"
 	V3CLUSTERSTATUS_DEGRADED V3ClusterStatus = "degraded"
+	V3CLUSTERSTATUS_DEPLOYMENT_FAILED V3ClusterStatus = "deploymentFailed"
+	V3CLUSTERSTATUS_SCALE_FAILED V3ClusterStatus = "scaleFailed"
+	V3CLUSTERSTATUS_UPGRADE_FAILED V3ClusterStatus = "upgradeFailed"
+	V3CLUSTERSTATUS_REBALANCE_FAILED V3ClusterStatus = "rebalanceFailed"
+	V3CLUSTERSTATUS_PEERING_FAILED V3ClusterStatus = "peeringFailed"
+	V3CLUSTERSTATUS_DESTROY_FAILED V3ClusterStatus = "destroyFailed"
 )
 
 var allowedV3ClusterStatusEnumValues = []V3ClusterStatus{
 	"draft",
 	"deploying",
+	"scaling",
+	"upgrading",
+	"rebalancing",
+	"peering",
 	"destroying",
 	"healthy",
 	"degraded",
+	"deploymentFailed",
+	"scaleFailed",
+	"upgradeFailed",
+	"rebalanceFailed",
+	"peeringFailed",
+	"destroyFailed",
 }
 
 func (v *V3ClusterStatus) UnmarshalJSON(src []byte) error {

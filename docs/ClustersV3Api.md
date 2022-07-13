@@ -37,7 +37,7 @@ import (
 )
 
 func main() {
-    v3CreateClusterRequest := *openapiclient.NewV3CreateClusterRequest(openapiclient.v3Environment("hosted"), "Demo G2 Cluster", "99d9487a-235b-4b5f-b610-577a60edb911", *openapiclient.NewV3Place(true), []openapiclient.V3Servers{*openapiclient.NewV3Servers(int32(4), "m5.xlarge", []openapiclient.V3CouchbaseServices{openapiclient.v3CouchbaseServices("data")}, *openapiclient.NewV3ServersStorage(openapiclient.v3StorageType("GP3"), int32(3000), int32(50)))}, *openapiclient.NewV3SupportPackage(openapiclient.v3SupportPackageTimezones("ET"), openapiclient.v3SupportPackageType("Basic"))) // V3CreateClusterRequest |  (optional)
+    v3CreateClusterRequest := *openapiclient.NewV3CreateClusterRequest(openapiclient.v3Environment("hosted"), "Demo G2 Cluster", "99d9487a-235b-4b5f-b610-577a60edb911", *openapiclient.NewV3Place(true), []openapiclient.V3Servers{*openapiclient.NewV3Servers(int32(4), "m5.xlarge", []openapiclient.V3CouchbaseServices{openapiclient.v3CouchbaseServices("data")}, *openapiclient.NewV3ServersStorage(openapiclient.v3StorageType("GP3"), int32(50)))}, *openapiclient.NewV3SupportPackage(openapiclient.v3SupportPackageTimezones("ET"), openapiclient.v3SupportPackageType("Basic"))) // V3CreateClusterRequest |  (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -522,7 +522,7 @@ import (
 
 func main() {
     id := TODO // string | Cluster ID
-    v3UpdateClusterServersRequest := *openapiclient.NewV3UpdateClusterServersRequest([]openapiclient.V3Servers{*openapiclient.NewV3Servers(int32(4), "m5.xlarge", []openapiclient.V3CouchbaseServices{openapiclient.v3CouchbaseServices("data")}, *openapiclient.NewV3ServersStorage(openapiclient.v3StorageType("GP3"), int32(3000), int32(50)))}) // V3UpdateClusterServersRequest |  (optional)
+    v3UpdateClusterServersRequest := *openapiclient.NewV3UpdateClusterServersRequest([]openapiclient.V3Servers{*openapiclient.NewV3Servers(int32(4), "m5.xlarge", []openapiclient.V3CouchbaseServices{openapiclient.v3CouchbaseServices("data")}, *openapiclient.NewV3ServersStorage(openapiclient.v3StorageType("GP3"), int32(50)))}) // V3UpdateClusterServersRequest |  (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
