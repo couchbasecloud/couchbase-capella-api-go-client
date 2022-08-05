@@ -3615,6 +3615,7 @@ components:
       enum:
       - GP3
       - IO2
+      - PD-SSD
       example: GP3
       type: string
     v3SupportPackageTimezones:
@@ -3778,18 +3779,17 @@ components:
         type:
           $ref: '#/components/schemas/v3StorageType'
         IOPS:
-          description: Min 3000 for GP3, 1000 if IO2. If storageType="GP3", max =
-            16000.  If storageType= "IO2", max= 64000
+          description: Required for GP3 and IO2. Min 3000 for GP3, 1000 if IO2. If
+            storageType="GP3", max = 16000. If storageType= "IO2", max= 64000
           example: 3000
           type: integer
         size:
-          description: Min 50Gb, max 16Tb
+          description: Min 50GB, max 16TB
           example: 50
           maximum: 16384
           minimum: 50
           type: integer
       required:
-      - IOPS
       - size
       - type
       type: object
